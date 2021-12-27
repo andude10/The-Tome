@@ -1,15 +1,13 @@
-﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace eBookShop.Models
 {
-    public class Category
+    public class User
     {
         [Key]
         public int Id { get; set; }
-
-        [Required]
         public string Name { get; set; }
-        public List<Book> Books { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

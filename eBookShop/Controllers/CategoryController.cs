@@ -19,13 +19,12 @@ namespace eBookShop.Controllers
             return View(objCategoryList);
         }
 
-        //Get
+        [HttpGet]
         public IActionResult CreateCategory()
         {
             return View();
         }
 
-        //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CreateCategory(Category obj)
@@ -40,7 +39,7 @@ namespace eBookShop.Controllers
             return View();
         }
 
-        //Get
+        [HttpGet]
         public IActionResult EditCategory(int? id)
         {
             if (id is null or 0)
@@ -58,7 +57,6 @@ namespace eBookShop.Controllers
             return View(category);
         }
 
-        //Post
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult EditCategory(Category obj)
