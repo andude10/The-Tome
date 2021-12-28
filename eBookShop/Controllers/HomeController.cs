@@ -14,18 +14,13 @@ namespace eBookShop.Controllers
             _logger = logger;
         }
 
-        [Authorize]
+        // [Authorize]
         public IActionResult Index()
-        {
-            return Content(User.Identity.Name);
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
 
-        public IActionResult Articles()
+        public IActionResult Privacy()
         {
             return View();
         }

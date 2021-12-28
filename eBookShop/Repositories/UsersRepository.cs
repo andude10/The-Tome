@@ -1,5 +1,6 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Repositories
 {
@@ -16,15 +17,19 @@ namespace eBookShop.Repositories
         {
             return _dbContext.Users.Find(id);
         }
+
+        public Task<User?> FindUserAsync(string email, string password)
+        {
+            return _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+        }
+
         public void Create(User item) 
         {
             _dbContext.Add(item);
-            _dbContext.SaveChanges();
         } 
         public void Update(User item)
         {
             _dbContext.Update(item);
-            _dbContext.SaveChanges();
         }
         public void Delete(int id)
         {
@@ -33,8 +38,12 @@ namespace eBookShop.Repositories
             if(user != null)
             {
                 _dbContext.Users.Remove(user);
-                _dbContext.SaveChanges();
             } 
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
 
         private bool _disposed;

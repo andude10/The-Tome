@@ -16,6 +16,10 @@ namespace eBookShop.Repositories
         {
             return _dbContext.Books.Find(id);
         }
+        public IEnumerable<Book> GetBooks()
+        {
+            return _dbContext.Books.ToList();
+        }
         public void Create(Book item) 
         {
             _dbContext.Add(item);

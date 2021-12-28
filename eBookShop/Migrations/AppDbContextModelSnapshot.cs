@@ -22,6 +22,36 @@ namespace eBookShop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("BookCategory", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "CategoriesId");
+
+                    b.HasIndex("CategoriesId");
+
+                    b.ToTable("BookCategory");
+                });
+
+            modelBuilder.Entity("BookOrder", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrdersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BooksId", "OrdersId");
+
+                    b.HasIndex("OrdersId");
+
+                    b.ToTable("BookOrder");
+                });
+
             modelBuilder.Entity("eBookShop.Models.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -30,8 +60,9 @@ namespace eBookShop.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDateTime")
                         .HasColumnType("datetime2");
@@ -39,9 +70,6 @@ namespace eBookShop.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderId")
-                        .HasColumnType("int");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -51,10 +79,6 @@ namespace eBookShop.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Books");
                 });
@@ -122,19 +146,34 @@ namespace eBookShop.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("eBookShop.Models.Book", b =>
+            modelBuilder.Entity("BookCategory", b =>
                 {
-                    b.HasOne("eBookShop.Models.Category", "Category")
-                        .WithMany("Books")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("eBookShop.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eBookShop.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BookOrder", b =>
+                {
+                    b.HasOne("eBookShop.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("BooksId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("eBookShop.Models.Order", null)
-                        .WithMany("Books")
-                        .HasForeignKey("OrderId");
-
-                    b.Navigation("Category");
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("eBookShop.Models.Order", b =>
@@ -146,16 +185,6 @@ namespace eBookShop.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("eBookShop.Models.Category", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("eBookShop.Models.Order", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

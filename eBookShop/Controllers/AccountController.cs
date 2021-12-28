@@ -8,15 +8,16 @@ using eBookShop.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using eBookShop.Data;
+using eBookShop.Repositories;
 
 namespace eBookShop.Controllers
 {
     public class AccountController : Controller
     {
-        private AppDbContext db;
+        private readonly IUsersRepository _usersRepository;
         public AccountController(AppDbContext context)
         {
-            db = context;
+            _usersRepository = new UsersRepository(context);
         }
 
         [HttpGet]
@@ -31,7 +32,7 @@ namespace eBookShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                User? user = await _usersRepository.FindUserAsync(model.Email, model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Email);
@@ -55,18 +56,20 @@ namespace eBookShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await db.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Name == model.Name);
+                User? user = await _usersRepository.FindUserAsync(model.Email, model.Password);
                 if (user == null)
                 {
-                    db.Users.Add(new User { Email = model.Email, Password = model.Password, Name = model.Name });
-                    await db.SaveChangesAsync();
+                    _usersRepository.Create(new User { Email = model.Email, Password = model.Password, Name = model.Name });
+                    await _usersRepository.SaveChangesAsync();
  
                     await Authenticate(model.Email);
  
                     return RedirectToAction("Index", "Home");
                 }
                 else
+                {
                     ModelState.AddModelError("", "Incorrect login or (and) password");
+                }
             }
             return View(model);
         }
