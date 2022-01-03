@@ -18,13 +18,9 @@ namespace eBookShop.Repositories
             return _dbContext.Users.Find(id);
         }
 
-        public User? GetUser(string email)
+        public async Task<User?> GetUserAsync(string email)
         {
-            var result = _dbContext.Users.Local.FirstOrDefault(u => u.Email == email);
-            var result1 = _dbContext.Users.Local.FirstOrDefault(u => u.Name == email);
-            var result2 = _dbContext.Users.Local.First(u => u.Email == email);
-
-            return result;
+            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public Task<User?> FindUserAsync(string email, string password)

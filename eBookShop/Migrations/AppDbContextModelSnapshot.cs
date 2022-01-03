@@ -179,12 +179,17 @@ namespace eBookShop.Migrations
             modelBuilder.Entity("eBookShop.Models.Order", b =>
                 {
                     b.HasOne("eBookShop.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("eBookShop.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

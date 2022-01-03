@@ -499,6 +499,9 @@ progress {
     display: none !important;
 }
 
+.wrapper{width:100%;}
+.box{float:left; height:100px; font-size:40px;}
+
 .lead {
     font-size: 1.25rem;
     font-weight: 300;

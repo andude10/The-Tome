@@ -3,11 +3,11 @@ using eBookShop.Models;
 
 namespace eBookShop.Repositories
 {
-    public class OrderRepository : IOrderRepository
+    public class OrdersRepository : IOrdersRepository
     {
         private readonly AppDbContext _dbContext;
 
-        public OrderRepository(AppDbContext dbContext)
+        public OrdersRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }

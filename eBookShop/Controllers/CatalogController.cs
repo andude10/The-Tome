@@ -19,7 +19,7 @@ namespace eBookShop.Controllers
 
         public IActionResult Index()
         {
-            return View(_booksRepository.GetBooks());
+            return View();
         }
     }
 }

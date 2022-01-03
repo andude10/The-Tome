@@ -16,19 +16,16 @@ namespace eBookShop.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> ProfileSettings()
+        public async Task<IActionResult> Info()
         {
-            //TODO: tomorrow
-            return Content(User.Identity.Name);
-            /*User user = await _usersRepository.FindUserAsync(User.Identity.Name);
+            var user = await _usersRepository.GetUserAsync(User.Identity.Name);
 
             if(user != null)
             {
                 return View(user);
             }
             
-            return RedirectToAction("Index", "Home");
-            */
+            return NotFound();
         }
 
         public IActionResult ShowOrders()

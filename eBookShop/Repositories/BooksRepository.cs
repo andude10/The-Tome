@@ -16,9 +16,9 @@ namespace eBookShop.Repositories
         {
             return _dbContext.Books.Find(id);
         }
-        public IEnumerable<Book> GetBooks()
+        public IEnumerable<Book> GetBooksFromOrder(Order order)
         {
-            return _dbContext.Books.ToList();
+            return order.Books;
         }
         public void Create(Book item) 
         {

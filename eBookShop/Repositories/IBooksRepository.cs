@@ -5,7 +5,7 @@ namespace eBookShop.Repositories
     public interface IBooksRepository : IDisposable
     {
         Book? GetBook(int id);
-        IEnumerable<Book> GetBooks();
+        IEnumerable<Book> GetBooksFromOrder(Order order);
         void Create(Book item); 
         void Update(Book item); 
         void Delete(int id); 
