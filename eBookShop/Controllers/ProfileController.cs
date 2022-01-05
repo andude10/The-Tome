@@ -10,9 +10,9 @@ namespace eBookShop.Controllers
     public class ProfileController : Controller
     {
         private readonly IUsersRepository _usersRepository;
-        public ProfileController(AppDbContext db)
+        public ProfileController()
         {
-            _usersRepository = new UsersRepository(db);
+            _usersRepository = new UsersRepository();
         }
 
         [Authorize]

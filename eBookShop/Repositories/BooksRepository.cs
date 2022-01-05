@@ -7,9 +7,9 @@ namespace eBookShop.Repositories
     {
         private readonly AppDbContext _dbContext;
 
-        public BooksRepository(AppDbContext dbContext)
+        public BooksRepository()
         {
-            _dbContext = dbContext;
+            _dbContext = new AppDbContext();
         }
 
         public Book? GetBook(int id)
@@ -23,12 +23,10 @@ namespace eBookShop.Repositories
         public void Create(Book item) 
         {
             _dbContext.Add(item);
-            _dbContext.SaveChanges();
         } 
         public void Update(Book item)
         {
             _dbContext.Update(item);
-            _dbContext.SaveChanges();
         }
         public void Delete(int id)
         {
@@ -37,12 +35,15 @@ namespace eBookShop.Repositories
             if(book != null)
             {
                 _dbContext.Books.Remove(book);
-                _dbContext.SaveChanges();
             } 
+        }
+        
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
 
         private bool _disposed;
-
         protected virtual void Dispose(bool disposing)
         {
             if (!this._disposed)

@@ -8,5 +8,6 @@ namespace eBookShop.Repositories
         void Create(Order item); 
         void Update(Order item); 
         void Delete(int id); 
+        Task<int> SaveChangesAsync();
     }
 }

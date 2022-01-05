@@ -14,15 +14,15 @@ namespace eBookShop.Controllers
 
         public CartController(AppDbContext db)
         {
-            _booksRepository = new BooksRepository(db);
-            _usersRepository = new UsersRepository(db);
-            _ordersRepository = new OrdersRepository(db);
+            _booksRepository = new BooksRepository();
+            _usersRepository = new UsersRepository();
+            _ordersRepository = new OrdersRepository();
         }
         
         [Authorize]
         public async Task<IActionResult> CartSummary()
         {
-            var user = await _usersRepository.GetUserAsync(User.Identity.Name);
+            var user = await _usersRepository.GetUserAsync("testEmail@gmail.com");
 
             if (user == null)
             {

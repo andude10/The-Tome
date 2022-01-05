@@ -15,9 +15,9 @@ namespace eBookShop.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersRepository _usersRepository;
-        public AccountController(AppDbContext context)
+        public AccountController()
         {
-            _usersRepository = new UsersRepository(context);
+            _usersRepository = new UsersRepository();
         }
 
         [HttpGet]

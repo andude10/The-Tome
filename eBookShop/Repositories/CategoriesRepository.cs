@@ -7,9 +7,9 @@ namespace eBookShop.Repositories
     {
         private readonly AppDbContext _dbContext;
 
-        public CategoriesRepository(AppDbContext dbContext)
+        public CategoriesRepository()
         {
-            _dbContext = dbContext;
+            _dbContext = new AppDbContext();
         }
 
         public Category? GetCategory(int id)
@@ -19,12 +19,10 @@ namespace eBookShop.Repositories
         public void Create(Category item) 
         {
             _dbContext.Add(item);
-            _dbContext.SaveChanges();
         } 
         public void Update(Category item)
         {
             _dbContext.Update(item);
-            _dbContext.SaveChanges();
         }
         public void Delete(int id)
         {
@@ -33,12 +31,15 @@ namespace eBookShop.Repositories
             if(category != null)
             {
                 _dbContext.Categories.Remove(category);
-                _dbContext.SaveChanges();
             } 
         }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
+        }
+        
         private bool _disposed;
-
         protected virtual void Dispose(bool disposing)
         {
             if (!this._disposed)

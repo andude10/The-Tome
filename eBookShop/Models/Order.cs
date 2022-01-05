@@ -9,8 +9,8 @@ namespace eBookShop.Models
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
         public int UserId { get; set; }
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
-        public List<Book> Books { get; set;}
+        public virtual List<Book> Books { get; set; } = new List<Book>();
     }
 }

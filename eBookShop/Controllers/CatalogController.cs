@@ -12,9 +12,9 @@ namespace eBookShop.Controllers
     {
         private readonly IBooksRepository _booksRepository;
 
-        public CatalogController(AppDbContext db)
+        public CatalogController()
         {
-            _booksRepository = new BooksRepository(db);
+            _booksRepository = new BooksRepository();
         }
 
         public IActionResult Index()

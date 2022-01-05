@@ -8,9 +8,9 @@ namespace eBookShop.Repositories
     {
         private readonly AppDbContext _dbContext;
 
-        public UsersRepository(AppDbContext dbContext)
+        public UsersRepository()
         {
-            _dbContext = dbContext;
+            _dbContext = new AppDbContext();
         }
 
         public User? GetUser(int id)

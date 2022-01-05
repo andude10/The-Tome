@@ -12,7 +12,7 @@ namespace eBookShop.Models
         public string Author { get; set;}
         public DateTime CreatedDateTime { get; set; }
 
-        public List<Category> Categories { get; set; }
-        public List<Order> Orders { get; set; }
+        public virtual List<Category> Categories { get; set; } = new List<Category>();
+        public virtual List<Order> Orders { get; set; } = new List<Order>();
     }
 }
