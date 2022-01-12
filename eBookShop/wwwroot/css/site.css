@@ -16,3 +16,40 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.plain-text {
+  font-size: 18pt;
+}
+
+li {
+  font-size: 20px;
+  display:inline-block;
+}
+
+.bg-welcome-img {
+  background-image : url("../Photos/welcome-picture.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 768px;
+}
+
+.bg-words-img {
+  background-image : url("../Photos/bg-words.jpg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  height: 768px;
+}
+
+.row-full{
+  width: 99.5vw;
+  position: relative;
+  margin-left: -50vw;
+  left: 50%;
+}
+
+.center-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

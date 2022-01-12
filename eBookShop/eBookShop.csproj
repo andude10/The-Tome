@@ -27,4 +27,15 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Photos\welcome-picture.jpg" />
+    <Resource Include="wwwroot\Photos\welcome-picture.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Content Remove="wwwroot\Photos\delivery.jpg" />
+    <Resource Include="wwwroot\Photos\delivery.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
 </Project>

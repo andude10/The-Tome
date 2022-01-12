@@ -37,7 +37,7 @@ namespace eBookShop.Controllers
                 {
                     await Authenticate(model.Email);
  
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("About", "Home");
                 }
                 ModelState.AddModelError("", "Incorrect login or (and) password");
             }
@@ -64,7 +64,7 @@ namespace eBookShop.Controllers
  
                     await Authenticate(model.Email);
  
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("About", "Home");
                 }
                 else
                 {
