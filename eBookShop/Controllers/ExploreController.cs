@@ -8,11 +8,11 @@ using System.Diagnostics;
 
 namespace eBookShop.Controllers
 {
-    public class CatalogController : Controller
+    public class ExploreController : Controller
     {
         private readonly IBooksRepository _booksRepository;
 
-        public CatalogController()
+        public ExploreController()
         {
             _booksRepository = new BooksRepository();
         }

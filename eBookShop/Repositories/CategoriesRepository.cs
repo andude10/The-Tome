@@ -12,9 +12,9 @@ namespace eBookShop.Repositories
             _dbContext = new AppDbContext();
         }
 
-        public Category? GetCategory(int id)
+        public Category? FindCategory(string name)
         {
-            return _dbContext.Categories.Find(id);
+            return _dbContext.Categories.FirstOrDefault(c => c.Name == name);
         }
         public void Create(Category item) 
         {
