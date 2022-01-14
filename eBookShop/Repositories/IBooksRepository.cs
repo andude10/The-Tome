@@ -2,13 +2,11 @@ using eBookShop.Models;
 
 namespace eBookShop.Repositories
 {
-    public interface IBooksRepository : IDisposable
+    public interface IBooksRepository
     {
         Book? GetBook(int id);
-        IEnumerable<Book> GetBooksFromOrder(Order order);
         void Create(Book item); 
         void Update(Book item); 
         void Delete(int id); 
-        Task<int> SaveChangesAsync();
     }
 }

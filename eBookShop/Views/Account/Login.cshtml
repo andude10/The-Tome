@@ -1,6 +1,6 @@
 @model eBookShop.ViewModels.LoginModel
  
-<h2>Welcome to eBookShop! Enter your existing username and password or register</h2>
+<h2 class="text-center mt-3">Welcome to eBookShop! Enter your existing username and password or register</h2>
  
 <a asp-action="Register" asp-controller="Account">Registration</a>
  
@@ -8,17 +8,17 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div class="form-group">
-            <label asp-for="Email">Enter Email</label>
-            <input type="text" asp-for="Email" />
+            <label asp-for="Email" class="form-label mt-4">Enter Email</label>
+            <input type="text" asp-for="Email" class="form-control"/>
             <span asp-validation-for="Email" />
         </div>
         <div class="form-group">
-            <label asp-for="Password">Enter password</label>
-            <input asp-for="Password" />
+            <label asp-for="Password" class="form-label mt-4">Enter password</label>
+            <input asp-for="Password" class="form-control"/>
             <span asp-validation-for="Password" />
         </div>
-        <div class="form-group">
-            <input type="submit" value="Submit" class="btn btn-outline-dark" />
+        <div class="form-group mt-3">
+            <input type="submit" value="Submit" class="btn btn-primary" />
         </div>
     </div>
 </form>

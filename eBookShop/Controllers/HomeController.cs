@@ -1,7 +1,9 @@
 ﻿using eBookShop.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using eBookShop.Data;
 using eBookShop.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Controllers
 {
@@ -9,7 +11,7 @@ namespace eBookShop.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IDbContextFactory<AppDbContext> contextFactory)
         {
             _logger = logger;
         }

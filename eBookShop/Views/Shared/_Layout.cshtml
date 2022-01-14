@@ -60,9 +60,13 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-	<div class="blockquote-footer text-center">
-		<p> Kotov Semyon 2022 </p>
-		<p> formalkotov@gmail.com </p>
-	</div>
+	<div class="blockquote-footer text-center" id="footer">
+    	<div class="navbar-inner">
+    		<div class="container">
+    			<p> Kotov Semyon 2022 </p>
+    			<p> formalkotov@gmail.com </p>
+    		</div>
+    	</div>
+    </div>
 </body>
 </html>
