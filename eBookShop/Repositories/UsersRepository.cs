@@ -6,69 +6,47 @@ namespace eBookShop.Repositories
 {
     public class UsersRepository : IUsersRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public UsersRepository()
+        public UsersRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _dbContext = new AppDbContext();
+            _contextFactory = contextFactory;
         }
 
-        public User? GetUser(int id)
+        public User? GetUser(string email)
         {
-            return _dbContext.Users.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            return context.Users.FirstOrDefault(u => u.Email == email);
         }
 
-        public async Task<User?> GetUserAsync(string email)
+        public User? FindUser(string email, string password)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public Task<User?> FindUserAsync(string email, string password)
-        {
-            return _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
+            using var context = _contextFactory.CreateDbContext();
+            return context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
         }
 
         public void Create(User item) 
         {
-            _dbContext.Add(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Add(item);
+            context.SaveChanges();
         } 
         public void Update(User item)
         {
-            _dbContext.Update(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Update(item);
+            context.SaveChanges();
         }
         public void Delete(int id)
         {
-            var user = _dbContext.Users.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            
+            var user = context.Users.Find(id);
 
-            if(user != null)
-            {
-                _dbContext.Users.Remove(user);
-            } 
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
-
-        private bool _disposed;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (user == null) return;
+            
+            context.Users.Remove(user);
+            context.SaveChanges();
         }
     }
 }

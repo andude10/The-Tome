@@ -1,9 +1,7 @@
 using eBookShop.Data;
-using eBookShop.Models;
 using eBookShop.Repositories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace eBookShop.Controllers
@@ -12,11 +10,11 @@ namespace eBookShop.Controllers
     {
         private readonly IBooksRepository _booksRepository;
 
-        public ExploreController()
+        public ExploreController(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _booksRepository = new BooksRepository();
+            _booksRepository = new BooksRepository(contextFactory);
         }
-
+        
         public IActionResult Index()
         {
             return View();

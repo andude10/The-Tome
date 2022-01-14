@@ -4,21 +4,22 @@ using eBookShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Controllers
 {
     public class ProfileController : Controller
     {
         private readonly IUsersRepository _usersRepository;
-        public ProfileController()
+        public ProfileController(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _usersRepository = new UsersRepository();
+            _usersRepository = new UsersRepository(contextFactory);
         }
 
         [Authorize]
-        public async Task<IActionResult> Info()
+        public IActionResult Info()
         {
-            var user = await _usersRepository.GetUserAsync(User.Identity.Name);
+            var user = _usersRepository.GetUser(User.Identity.Name);
 
             if(user != null)
             {

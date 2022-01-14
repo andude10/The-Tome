@@ -1,65 +1,45 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Repositories
 {
     public class BooksRepository : IBooksRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public BooksRepository()
+        public BooksRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _dbContext = new AppDbContext();
+            _contextFactory = contextFactory;
         }
 
         public Book? GetBook(int id)
         {
-            return _dbContext.Books.Find(id);
-        }
-        public IEnumerable<Book> GetBooksFromOrder(Order order)
-        {
-            return order.Books;
+            using var context = _contextFactory.CreateDbContext();
+            return context.Books.Find(id);
         }
         public void Create(Book item) 
         {
-            _dbContext.Add(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Add(item);
+            context.SaveChanges();
         } 
         public void Update(Book item)
         {
-            _dbContext.Update(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Update(item);
+            context.SaveChanges();
         }
         public void Delete(int id)
         {
-            var book = _dbContext.Books.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            
+            var book = context.Books.Find(id);
 
-            if(book != null)
-            {
-                _dbContext.Books.Remove(book);
-            } 
-        }
-        
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
-
-        private bool _disposed;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (book == null) return;
+            
+            context.Books.Remove(book);
+            context.SaveChanges();
         }
     }
 }

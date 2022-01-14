@@ -3,6 +3,7 @@ using eBookShop.Models;
 using eBookShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Controllers
 {
@@ -12,17 +13,17 @@ namespace eBookShop.Controllers
         private readonly IBooksRepository _booksRepository;
         private readonly IOrdersRepository _ordersRepository;
 
-        public CartController(AppDbContext db)
+        public CartController(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _booksRepository = new BooksRepository();
-            _usersRepository = new UsersRepository();
-            _ordersRepository = new OrdersRepository();
+            _booksRepository = new BooksRepository(contextFactory);
+            _usersRepository = new UsersRepository(contextFactory);
+            _ordersRepository = new OrdersRepository(contextFactory);
         }
         
         [Authorize]
         public async Task<IActionResult> CartSummary()
         {
-            var user = await _usersRepository.GetUserAsync("testEmail@gmail.com");
+            var user = _usersRepository.GetUser("testEmail@gmail.com");
 
             if (user == null)
             {

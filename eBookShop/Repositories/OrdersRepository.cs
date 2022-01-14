@@ -1,61 +1,45 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Repositories
 {
     public class OrdersRepository : IOrdersRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public OrdersRepository()
+        public OrdersRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _dbContext = new AppDbContext();
+            _contextFactory = contextFactory;
         }
 
         public Order? GetOrder(int id)
         {
-            return _dbContext.Orders.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            return context.Orders.Find(id);
         }
         public void Create(Order item) 
         {
-            _dbContext.Add(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Add(item);
+            context.SaveChanges();
         } 
         public void Update(Order item)
         {
-            _dbContext.Update(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Update(item);
+            context.SaveChanges();
         }
         public void Delete(int id)
         {
-            var order = _dbContext.Orders.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            
+            var order = context.Orders.Find(id);
 
-            if(order != null)
-            {
-                _dbContext.Orders.Remove(order);
-            } 
-        }
-        
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
-
-        private bool _disposed;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (order == null) return;
+            
+            context.Orders.Remove(order);
+            context.SaveChanges();
         }
     }
 }

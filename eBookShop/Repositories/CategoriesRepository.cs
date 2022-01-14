@@ -1,61 +1,45 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Repositories
 {
     public class CategoriesRepository : ICategoriesRepository
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
-        public CategoriesRepository()
+        public CategoriesRepository(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _dbContext = new AppDbContext();
+            _contextFactory = contextFactory;
         }
 
         public Category? FindCategory(string name)
         {
-            return _dbContext.Categories.FirstOrDefault(c => c.Name == name);
+            using var context = _contextFactory.CreateDbContext();
+            return context.Categories.FirstOrDefault(c => c.Name == name);
         }
         public void Create(Category item) 
         {
-            _dbContext.Add(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Add(item);
+            context.SaveChanges();
         } 
         public void Update(Category item)
         {
-            _dbContext.Update(item);
+            using var context = _contextFactory.CreateDbContext();
+            context.Update(item);
+            context.SaveChanges();
         }
         public void Delete(int id)
         {
-            var category = _dbContext.Categories.Find(id);
+            using var context = _contextFactory.CreateDbContext();
+            
+            var category = context.Categories.Find(id);
 
-            if(category != null)
-            {
-                _dbContext.Categories.Remove(category);
-            } 
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
-        
-        private bool _disposed;
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    _dbContext.Dispose();
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            if (category == null) return;
+            
+            context.Categories.Remove(category);
+            context.SaveChanges();
         }
     }
 }

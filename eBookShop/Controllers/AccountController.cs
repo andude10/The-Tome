@@ -15,9 +15,9 @@ namespace eBookShop.Controllers
     public class AccountController : Controller
     {
         private readonly IUsersRepository _usersRepository;
-        public AccountController()
+        public AccountController(IDbContextFactory<AppDbContext> contextFactory)
         {
-            _usersRepository = new UsersRepository();
+            _usersRepository = new UsersRepository(contextFactory);
         }
 
         [HttpGet]
@@ -28,19 +28,19 @@ namespace eBookShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public IActionResult Login(LoginModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            
+            var user = _usersRepository.FindUser(model.Email, model.Password);
+            if (user != null)
             {
-                User? user = await _usersRepository.FindUserAsync(model.Email, model.Password);
-                if (user != null)
-                {
-                    await Authenticate(model.Email);
+                Authenticate(model.Email);
  
-                    return RedirectToAction("About", "Home");
-                }
-                ModelState.AddModelError("", "Incorrect login or (and) password");
+                return RedirectToAction("About", "Home");
             }
+            
+            ModelState.AddModelError("", "Incorrect login or (and) password");
             return View(model);
         }
 
@@ -52,38 +52,34 @@ namespace eBookShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public IActionResult Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+            
+            var user = _usersRepository.FindUser(model.Email, model.Password);
+            if (user == null)
             {
-                User? user = await _usersRepository.FindUserAsync(model.Email, model.Password);
-                if (user == null)
-                {
-                    _usersRepository.Create(new User { Email = model.Email, Password = model.Password, Name = model.Name });
-                    await _usersRepository.SaveChangesAsync();
+                _usersRepository.Create(new User { Email = model.Email, Password = model.Password, Name = model.Name });
+
+                Authenticate(model.Email);
  
-                    await Authenticate(model.Email);
- 
-                    return RedirectToAction("About", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Incorrect login or (and) password");
-                }
+                return RedirectToAction("About", "Home");
             }
+
+            ModelState.AddModelError("", "Incorrect login or (and) password");
             return View(model);
         }
  
-        private async Task Authenticate(string userName)
+        private void Authenticate(string userName)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
             };
 
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
  
         public async Task<IActionResult> Logout()
