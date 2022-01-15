@@ -1,12 +1,11 @@
 using eBookShop.Models;
 
-namespace eBookShop.Repositories
+namespace eBookShop.Repositories;
+
+public interface ICategoriesRepository
 {
-    public interface ICategoriesRepository
-    {
-        Category? FindCategory(string name);
-        void Create(Category item); 
-        void Update(Category item); 
-        void Delete(int id); 
-    }
+    Category? FindCategory(string name);
+    void Create(Category item);
+    void Update(Category item);
+    void Delete(int id);
 }

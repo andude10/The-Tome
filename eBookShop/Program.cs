@@ -1,7 +1,6 @@
 using eBookShop.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +11,10 @@ var connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContextFactory<AppDbContext>(options => options.UseSqlServer(connection));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options => //CookieAuthenticationOptions
-                {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
+    .AddCookie(options => //CookieAuthenticationOptions
+    {
+        options.LoginPath = new PathString("/Account/Login");
+    });
 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
@@ -34,13 +33,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();    
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=About}/{id?}");
+    "default",
+    "{controller=Home}/{action=About}/{id?}");
 
 app.Run();
