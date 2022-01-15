@@ -1,64 +1,86 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+
+.book-presentation {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+
+.book-presentation:hover {
+    transition: all 0.3s ease;
+    box-shadow: 1px 1px #437ee5,
+    2px 2px #437ee5,
+    3px 3px #437ee5,
+    4px 4px #437ee5,
+    5px 5px #437ee5,
+    6px 6px #437ee5,
+    7px 7px #437ee5;
+    -webkit-transform: translateX(-7px);
+    transform: translateX(-7px);
 }
 
 #footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 100px;
-  background-color: #f5f5f5;
+    position: absolute;
+    bottom: -200px;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 150px;
+    background-color: #f5f5f5;
 }
 
 .plain-text {
-  font-size: 18pt;
+    font-size: 18pt;
+}
+
+.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 80px;
+    text-align: center;
 }
 
 li {
-  font-size: 20px;
-  display:inline-block;
+    font-size: 20px;
+    display: inline-block;
 }
 
 .bg-welcome-img {
-  background-image : url("../Photos/welcome-picture.jpg");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  height: 768px;
+    background-image: url("../Photos/welcome-picture.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 768px;
 }
 
 .bg-words-img {
-  background-image : url("../Photos/bg-words.jpg");
-  background-repeat: no-repeat;
-  background-size: 100%;
-  height: 768px;
+    background-image: url("../Photos/bg-words.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    height: 768px;
 }
 
-.row-full{
-  width: 99.5vw;
-  position: relative;
-  margin-left: -50vw;
-  left: 50%;
+.row-full {
+    width: 99.5vw;
+    position: relative;
+    margin-left: -50vw;
+    left: 50%;
 }
 
 .center-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }

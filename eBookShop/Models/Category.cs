@@ -1,16 +1,12 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace eBookShop.Models
+namespace eBookShop.Models;
+
+public class Category
 {
-    public class Category
-    {
-        [Key]
-        public int Id { get; set; }
+    [Key] public int Id { get; set; }
 
-        [Required]
-        public string Name { get; set; }
+    [Required] public string Name { get; set; }
 
-        public virtual List<Book> Books { get; set; } = new List<Book>();
-    }
+    public virtual List<Book> Books { get; set; } = new();
 }

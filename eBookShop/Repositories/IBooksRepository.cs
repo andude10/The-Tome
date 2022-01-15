@@ -1,12 +1,12 @@
 using eBookShop.Models;
 
-namespace eBookShop.Repositories
+namespace eBookShop.Repositories;
+
+public interface IBooksRepository
 {
-    public interface IBooksRepository
-    {
-        Book? GetBook(int id);
-        void Create(Book item); 
-        void Update(Book item); 
-        void Delete(int id); 
-    }
+    Book? GetBook(int id);
+    IEnumerable<Book> GetBooks();
+    void Create(Book item);
+    void Update(Book item);
+    void Delete(int id);
 }

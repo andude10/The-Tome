@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace eBookShop.ViewModels
+namespace eBookShop.ViewModels;
+
+public class LoginModel
 {
-    public class LoginModel
-    {
-        [Required(ErrorMessage = "Не указан Email")]
-        public string Email { get; set; }
-         
-        [Required(ErrorMessage = "Не указан пароль")]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-    }
+    [Required(ErrorMessage = "Email not specified")]
+    public string Email { get; set; }
+
+    [Required(ErrorMessage = "Password not specified")]
+    [DataType(DataType.Password)]
+    public string Password { get; set; }
 }

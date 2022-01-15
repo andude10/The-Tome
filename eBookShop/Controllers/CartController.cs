@@ -1,38 +1,33 @@
 ﻿using eBookShop.Data;
-using eBookShop.Models;
 using eBookShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace eBookShop.Controllers
+namespace eBookShop.Controllers;
+
+public class CartController : Controller
 {
-    public class CartController : Controller
+    private readonly IBooksRepository _booksRepository;
+    private readonly IOrdersRepository _ordersRepository;
+    private readonly IUsersRepository _usersRepository;
+
+    public CartController(IDbContextFactory<AppDbContext> contextFactory)
     {
-        private readonly IUsersRepository _usersRepository;
-        private readonly IBooksRepository _booksRepository;
-        private readonly IOrdersRepository _ordersRepository;
+        _booksRepository = new BooksRepository(contextFactory);
+        _usersRepository = new UsersRepository(contextFactory);
+        _ordersRepository = new OrdersRepository(contextFactory);
+    }
 
-        public CartController(IDbContextFactory<AppDbContext> contextFactory)
-        {
-            _booksRepository = new BooksRepository(contextFactory);
-            _usersRepository = new UsersRepository(contextFactory);
-            _ordersRepository = new OrdersRepository(contextFactory);
-        }
-        
-        [Authorize]
-        public async Task<IActionResult> CartSummary()
-        {
-            var user = _usersRepository.GetUser("testEmail@gmail.com");
+    [Authorize]
+    public IActionResult CartSummary()
+    {
+        var user = _usersRepository.GetUser("testEmail@gmail.com");
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+        if (user == null) return NotFound();
 
-            var result = user.Orders.Last().Books;
+        var result = user.Orders.Last().Books;
 
-            return View(result);
-        }
-    }    
+        return View(result);
+    }
 }

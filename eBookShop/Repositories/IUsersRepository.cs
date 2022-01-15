@@ -1,13 +1,12 @@
 using eBookShop.Models;
 
-namespace eBookShop.Repositories
+namespace eBookShop.Repositories;
+
+public interface IUsersRepository
 {
-    public interface IUsersRepository
-    {
-        User? GetUser(string email);
-        User? FindUser(string email, string password);
-        void Create(User item); 
-        void Update(User item); 
-        void Delete(int id); 
-    }
+    User? GetUser(string email);
+    User? FindUser(string email, string password);
+    void Create(User item);
+    void Update(User item);
+    void Delete(int id);
 }

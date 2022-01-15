@@ -1,12 +1,11 @@
 using eBookShop.Models;
 
-namespace eBookShop.Repositories
+namespace eBookShop.Repositories;
+
+public interface IOrdersRepository
 {
-    public interface IOrdersRepository
-    {
-        Order? GetOrder(int id);
-        void Create(Order item); 
-        void Update(Order item); 
-        void Delete(int id); 
-    }
+    Order? GetOrder(int id);
+    void Create(Order item);
+    void Update(Order item);
+    void Delete(int id);
 }
