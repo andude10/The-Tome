@@ -6,48 +6,63 @@ namespace eBookShop.Repositories;
 
 public class UsersRepository : IUsersRepository
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly AppDbContext _dbContext;
 
     public UsersRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _dbContext = contextFactory.CreateDbContext();
     }
 
     public User? GetUser(string email)
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Users.FirstOrDefault(u => u.Email == email);
+        return _dbContext.Users.FirstOrDefault(u => u.Email == email);
     }
 
     public User? FindUser(string email, string password)
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+        return _dbContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
     }
 
     public void Create(User item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Add(item);
-        context.SaveChanges();
+        _dbContext.Add(item);
+        _dbContext.SaveChanges();
     }
 
     public void Update(User item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Update(item);
-        context.SaveChanges();
+        _dbContext.Update(item);
+        _dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-
-        var user = context.Users.Find(id);
+        var user = _dbContext.Users.Find(id);
 
         if (user == null) return;
 
-        context.Users.Remove(user);
-        context.SaveChanges();
+        _dbContext.Users.Remove(user);
+        _dbContext.SaveChanges();
     }
+    
+    #region Dispose interface
+    private bool _disposed = false;
+    protected virtual void Dispose(bool disposing)
+    {
+        if(!_disposed)
+        {
+            if(disposing)
+            {
+                _dbContext.Dispose();
+            }
+        }
+        _disposed = true;
+    }
+ 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

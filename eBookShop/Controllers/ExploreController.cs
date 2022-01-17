@@ -2,6 +2,7 @@ using eBookShop.Data;
 using eBookShop.Models;
 using eBookShop.Repositories;
 using eBookShop.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,14 +12,14 @@ public class ExploreController : Controller
 {
     private const int PageSize = 12;
     private readonly IBooksRepository _booksRepository;
-
+    private readonly IUsersRepository _usersRepository;
     private List<Book> _books;
-
-    private Predicate<Book> _predicate;
 
     public ExploreController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _booksRepository = new BooksRepository(contextFactory);
+        _usersRepository = new UsersRepository(contextFactory);
+
         _books = _booksRepository.GetBooks().ToList();
     }
 
@@ -34,6 +35,18 @@ public class ExploreController : Controller
         };
 
         return View(viewModel);
+    }
+
+    public IActionResult BookViewer(int bookId)
+    {
+        var book = _booksRepository.GetBook(bookId);
+        
+        if (book == null)
+        {
+            return NotFound(book);
+        }
+        
+        return View(new BookViewerViewModel(_usersRepository.GetUser(User.Identity.Name), book));
     }
 
     /// <summary>

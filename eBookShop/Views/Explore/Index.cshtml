@@ -8,7 +8,7 @@
 
 <div class="pt-3 hstack">
     <div class="dropdown ms-2">
-        <a class="dropdown-toggle btn-primary btn" data-bs-toggle="dropdown" role="button">
+        <a class="btn-primary btn" data-bs-toggle="dropdown" role="button">
             @{
                 switch (Model.SortBookState)
                 {
@@ -32,7 +32,7 @@
         </a>
 
         <div class="dropdown-menu" >
-            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular" accesskey
+            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
                >Popular first</a>
             <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
                >Cheaper first</a>
@@ -51,11 +51,11 @@
 <div class="m-3">
     <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortBookState="@Model.SortBookState"
        class="btn btn-primary @hasPreviousPage">
-        <h5>Back</h5>
+        <p>Back</p>
     </a>
     
     <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortBookState="@Model.SortBookState"
        class="btn btn-primary @hasNextPage">
-        <h5>Forward</h5>
+        <p>Forward</p>
     </a>
 </div>

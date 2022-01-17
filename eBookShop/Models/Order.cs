@@ -5,8 +5,8 @@ namespace eBookShop.Models;
 public class Order
 {
     [Key] public int Id { get; set; }
-
     public DateTime OrderDate { get; set; } = DateTime.Now;
+    public bool IsCompleted { get; set; } = false;
 
     public int UserId { get; set; }
     public virtual User User { get; set; }

@@ -2,7 +2,7 @@ using eBookShop.Models;
 
 namespace eBookShop.Repositories;
 
-public interface ICategoriesRepository
+public interface ICategoriesRepository : IDisposable
 {
     Category? FindCategory(string name);
     void Create(Category item);

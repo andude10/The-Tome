@@ -1,4 +1,6 @@
-﻿using eBookShop.Data;
+﻿using Castle.Core.Internal;
+using eBookShop.Data;
+using eBookShop.Models;
 using eBookShop.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,5 +31,25 @@ public class CartController : Controller
         var result = user.Orders.Last().Books;
 
         return View(result);
+    }
+    
+    [Authorize]
+    public void AddBookToCart(int bookId)
+    {
+        var user = _usersRepository.GetUser(User.Identity.Name);
+        var book = _booksRepository.GetBook(bookId);
+        
+        if (user.Orders.IsNullOrEmpty() || user.Orders.Last().IsCompleted)
+        {
+            var order = new Order() {User = user, OrderDate = DateTime.Now};
+            order.Books.Add(book);
+            user.Orders.Add(order);
+        }
+        else
+        {
+            user.Orders.Last().Books.Add(book);
+        }
+        
+        _usersRepository.Update(user);
     }
 }

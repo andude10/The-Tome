@@ -2,7 +2,7 @@ using eBookShop.Models;
 
 namespace eBookShop.Repositories;
 
-public interface IBooksRepository
+public interface IBooksRepository : IDisposable
 {
     Book? GetBook(int id);
     IEnumerable<Book> GetBooks();

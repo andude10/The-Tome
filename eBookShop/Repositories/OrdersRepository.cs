@@ -6,42 +6,57 @@ namespace eBookShop.Repositories;
 
 public class OrdersRepository : IOrdersRepository
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
-
+    private readonly AppDbContext _dbContext;
     public OrdersRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _dbContext = contextFactory.CreateDbContext();
     }
 
     public Order? GetOrder(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Orders.Find(id);
+        return _dbContext.Orders.Find(id);
     }
 
     public void Create(Order item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Add(item);
-        context.SaveChanges();
+        _dbContext.Add(item);
+        _dbContext.SaveChanges();
     }
 
     public void Update(Order item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Update(item);
-        context.SaveChanges();
+        _dbContext.Update(item);
+        _dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-
-        var order = context.Orders.Find(id);
+        var order = _dbContext.Orders.Find(id);
 
         if (order == null) return;
 
-        context.Orders.Remove(order);
-        context.SaveChanges();
+        _dbContext.Orders.Remove(order);
+        _dbContext.SaveChanges();
     }
+    
+    #region Dispose interface
+    private bool _disposed = false;
+    protected virtual void Dispose(bool disposing)
+    {
+        if(!_disposed)
+        {
+            if(disposing)
+            {
+                _dbContext.Dispose();
+            }
+        }
+        _disposed = true;
+    }
+ 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

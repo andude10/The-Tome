@@ -6,48 +6,63 @@ namespace eBookShop.Repositories;
 
 public class BooksRepository : IBooksRepository
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly AppDbContext _dbContext;
 
     public BooksRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _dbContext = contextFactory.CreateDbContext();
     }
 
     public Book? GetBook(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Books.Find(id);
+        return _dbContext.Books.Find(id);
     }
 
     public IEnumerable<Book> GetBooks()
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Books.ToList();
+        return _dbContext.Books.ToList();
     }
 
     public void Create(Book item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Add(item);
-        context.SaveChanges();
+        _dbContext.Add(item);
+        _dbContext.SaveChanges();
     }
 
     public void Update(Book item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Update(item);
-        context.SaveChanges();
+        _dbContext.Update(item);
+        _dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-
-        var book = context.Books.Find(id);
+        var book = _dbContext.Books.Find(id);
 
         if (book == null) return;
 
-        context.Books.Remove(book);
-        context.SaveChanges();
+        _dbContext.Books.Remove(book);
+        _dbContext.SaveChanges();
     }
+
+    #region Dispose interface
+    private bool _disposed = false;
+    protected virtual void Dispose(bool disposing)
+    {
+        if(!_disposed)
+        {
+            if(disposing)
+            {
+                _dbContext.Dispose();
+            }
+        }
+        _disposed = true;
+    }
+ 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

@@ -2,7 +2,7 @@ using eBookShop.Models;
 
 namespace eBookShop.Repositories;
 
-public interface IOrdersRepository
+public interface IOrdersRepository : IDisposable
 {
     Order? GetOrder(int id);
     void Create(Order item);

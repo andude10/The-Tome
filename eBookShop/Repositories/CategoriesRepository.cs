@@ -6,42 +6,58 @@ namespace eBookShop.Repositories;
 
 public class CategoriesRepository : ICategoriesRepository
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly AppDbContext _dbContext;
 
     public CategoriesRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _dbContext = contextFactory.CreateDbContext();
     }
 
     public Category? FindCategory(string name)
     {
-        using var context = _contextFactory.CreateDbContext();
-        return context.Categories.FirstOrDefault(c => c.Name == name);
+        return _dbContext.Categories.FirstOrDefault(c => c.Name == name);
     }
 
     public void Create(Category item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Add(item);
-        context.SaveChanges();
+        _dbContext.Add(item);
+        _dbContext.SaveChanges();
     }
 
     public void Update(Category item)
     {
-        using var context = _contextFactory.CreateDbContext();
-        context.Update(item);
-        context.SaveChanges();
+        _dbContext.Update(item);
+        _dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        using var context = _contextFactory.CreateDbContext();
-
-        var category = context.Categories.Find(id);
+        var category = _dbContext.Categories.Find(id);
 
         if (category == null) return;
 
-        context.Categories.Remove(category);
-        context.SaveChanges();
+        _dbContext.Categories.Remove(category);
+        _dbContext.SaveChanges();
     }
+
+    #region Dispose interface
+    private bool _disposed = false;
+    protected virtual void Dispose(bool disposing)
+    {
+        if(!_disposed)
+        {
+            if(disposing)
+            {
+                _dbContext.Dispose();
+            }
+        }
+        _disposed = true;
+    }
+ 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+    #endregion
 }

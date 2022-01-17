@@ -38,5 +38,9 @@
         <Resource Include="wwwroot\Photos\delivery.jpg">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Resource>
+        <Content Remove="wwwroot\Icons\plus.png" />
+        <Resource Include="wwwroot\Icons\plus.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Resource>
     </ItemGroup>
 </Project>
