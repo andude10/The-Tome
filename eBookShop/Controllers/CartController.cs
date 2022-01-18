@@ -1,7 +1,9 @@
-﻿using Castle.Core.Internal;
+﻿using System.Linq;
+using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
 using eBookShop.Repositories;
+using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +26,20 @@ public class CartController : Controller
     [Authorize]
     public IActionResult CartSummary()
     {
-        var user = _usersRepository.GetUser("testEmail@gmail.com");
+        var user = _usersRepository.GetUser(User.Identity.Name);
 
         if (user == null) return NotFound();
 
-        var result = user.Orders.Last().Books;
+        var books = user.Orders.Last().Books;
 
-        return View(result);
+        var cartVm = new CartViewModel()
+        {
+            Books = books,
+            TotalPrice = books.Sum(b => b.Price),
+            OrderId = user.Orders.Last().Id
+        };
+
+        return View(cartVm);
     }
     
     [Authorize]

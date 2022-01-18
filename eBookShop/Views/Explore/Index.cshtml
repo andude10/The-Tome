@@ -6,56 +6,58 @@
     var hasNextPage = Model.PageViewModel.HasNextPage ? "" : "disabled";
 }
 
-<div class="pt-3 hstack">
-    <div class="dropdown ms-2">
-        <a class="btn-primary btn" data-bs-toggle="dropdown" role="button">
-            @{
-                switch (Model.SortBookState)
-                {
-                    case SortBookState.Popular:
-                        <div>Popular first</div>
-                        break;
-                    case SortBookState.HighRating:
-                        <div>First with a high rating</div>
-                        break;
-                    case SortBookState.PriceAsc:
-                        <div>Cheaper first </div>
-                        break;
-                    case SortBookState.PriceDesc:
-                        <div>More expensive first </div>
-                        break;
-                    default:
-                        <div>Popular first </div>
-                        break;
-                }
-            }
-        </a>
-
-        <div class="dropdown-menu" >
-            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
-               >Popular first</a>
-            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
-               >Cheaper first</a>
-            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc"
-               >More expensive first</a>
-            <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating"
-               >First with a high rating</a>
+<div class="row m-2">
+    <div class="col-sm-3 card mt-3">
+        
+    </div>
+    <div class="col-sm-9">
+        <div class="pt-3 hstack">
+            <div class="dropdown ms-2">
+                <a class="btn-primary btn" data-bs-toggle="dropdown" role="button">
+                    @{
+                        switch (Model.SortBookState)
+                        {
+                            case SortBookState.Popular:
+                                <div>Popular first</div>
+                                break;
+                            case SortBookState.HighRating:
+                                <div>First with a high rating</div>
+                                break;
+                            case SortBookState.PriceAsc:
+                                <div>Cheaper first </div>
+                                break;
+                            case SortBookState.PriceDesc:
+                                <div>More expensive first </div>
+                                break;
+                            default:
+                                <div>Popular first </div>
+                                break;
+                        }
+                    }
+                </a>
+        
+                <div class="dropdown-menu" >
+                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
+                       >Popular first</a>
+                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
+                       >Cheaper first</a>
+                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc"
+                       >More expensive first</a>
+                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating"
+                       >First with a high rating</a>
+                </div>
+            </div>
         </div>
+        
+        @Html.Partial("_book-list", model: Model.Books)
     </div>
 </div>
 
-<div>
-    @Html.Partial("_book-list", model: Model.Books)
-</div>
-
-<div class="m-3">
-    <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortBookState="@Model.SortBookState"
-       class="btn btn-primary @hasPreviousPage">
-        <p>Back</p>
-    </a>
-    
-    <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortBookState="@Model.SortBookState"
-       class="btn btn-primary @hasNextPage">
-        <p>Forward</p>
-    </a>
-</div>
+<ul class="pagination justify-content-center m-3">
+    <li class="page-item @hasPreviousPage">
+        <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Previous</a>
+    </li>
+    <li class="page-item @hasNextPage">
+        <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Next</a>
+    </li>
+</ul>

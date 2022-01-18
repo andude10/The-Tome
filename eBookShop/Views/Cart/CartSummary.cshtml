@@ -1,35 +1,24 @@
-﻿@model IEnumerable<Book>
+﻿@model eBookShop.ViewModels.CartViewModel
 
 @{
     ViewData["Title"] = "Added books to cart";
 }
 
-<table class="table table-bordered table-striped" style="width: 100%">
-    <thead>
-    <tr>
-        <th>
-            Category Name
-        </th>
-        <th>
-            Display Order
-        </th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var obj in Model)
-    {
-        <tr>
-            <td width="40%">
-                @obj.Title
-            </td>
-            <td width="30%">
-                @obj.Author
-            </td>
-            <td width="30%">
-                @obj.Price
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+<div class="row mt-3">
+    <h1>Cart</h1>
+    
+    <div class="card card-body col-sm-7 m-2">
+        @Html.Partial("_book-list", model: Model.Books)
+    </div>
+
+    <div class="card card-body col-sm-1 m-2">
+        <p class="card p-2 m-1">Total price: @Model.TotalPrice$</p>
+        <p class="card p-2 m-1">Number of books: @Model.Books.Count()</p>
+        <p class="card p-2 m-1">Order id: @Model.OrderId</p>
+        <div class="card p-2 m-1">
+            <p class="p-1">In stores tomorrow (from 11:00)</p>
+            <p class="p-1">Delivery to the point of issue: available</p>
+        </div>
+        <button class="btn btn-primary p-2 m-1">Place an order</button>
+    </div>
+</div>
