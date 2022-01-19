@@ -2,6 +2,7 @@
 
 namespace eBookShop.Models;
 
+//TODO: implement cloning
 public class Book
 {
     [Key] public int Id { get; set; }
@@ -11,7 +12,8 @@ public class Book
     public string Author { get; set; }
     public Uri CoverUrl { get; set; }
     public DateTime CreatedDateTime { get; set; }
-    public double Rating { get; set; }
+    public double Stars { get; set; }
     public virtual List<Category> Categories { get; set; } = new();
+    public virtual List<User> UsersWhoLike { get; set; } = new();
     public virtual List<Order> Orders { get; set; } = new();
 }

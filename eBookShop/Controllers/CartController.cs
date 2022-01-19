@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
@@ -27,16 +28,19 @@ public class CartController : Controller
     public IActionResult CartSummary()
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
+        Debug.Assert(user != null, nameof(user) + " != null");
+        _usersRepository.LoadOrders(ref user);
+        _usersRepository.LoadLikedBooks(ref user);
 
-        if (user == null) return NotFound();
-
-        var books = user.Orders.Last().Books;
+        var cart = user.Orders.Last();
+        _ordersRepository.LoadBooks(ref cart);
+        var books = cart.Books;
 
         var cartVm = new CartViewModel()
         {
-            Books = books,
             TotalPrice = books.Sum(b => b.Price),
-            OrderId = user.Orders.Last().Id
+            OrderId = user.Orders.Last().Id,
+            CatalogViewModel = new CatalogViewModel(books, user.LikedBooks)
         };
 
         return View(cartVm);
@@ -46,17 +50,23 @@ public class CartController : Controller
     public void AddBookToCart(int bookId)
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
-        var book = _booksRepository.GetBook(bookId);
+        Debug.Assert(user != null, nameof(user) + " != null");
+        _usersRepository.LoadOrders(ref user);
         
-        if (user.Orders.IsNullOrEmpty() || user.Orders.Last().IsCompleted)
+        var book = _booksRepository.GetBook(bookId);
+
+        var cart = user.Orders.Last();
+        
+        if (user.Orders.IsNullOrEmpty() || cart.IsCompleted)
         {
-            var order = new Order() {User = user, OrderDate = DateTime.Now};
+            var order = new Order() { User = user, OrderDate = DateTime.Now };
             order.Books.Add(book);
             user.Orders.Add(order);
         }
         else
         {
-            user.Orders.Last().Books.Add(book);
+            _ordersRepository.LoadBooks(ref cart);
+            cart.Books.Add(book);
         }
         
         _usersRepository.Update(user);

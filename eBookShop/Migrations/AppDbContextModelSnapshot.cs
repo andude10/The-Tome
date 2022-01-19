@@ -52,6 +52,21 @@ namespace eBookShop.Migrations
                     b.ToTable("BookOrder");
                 });
 
+            modelBuilder.Entity("BookUser", b =>
+                {
+                    b.Property<int>("LikedBooksId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersWhoLikeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LikedBooksId", "UsersWhoLikeId");
+
+                    b.HasIndex("UsersWhoLikeId");
+
+                    b.ToTable("BookUser");
+                });
+
             modelBuilder.Entity("eBookShop.Models.Book", b =>
                 {
                     b.Property<int>("Id")
@@ -78,7 +93,7 @@ namespace eBookShop.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<double>("Rating")
+                    b.Property<double>("Stars")
                         .HasColumnType("float");
 
                     b.Property<string>("Title")
@@ -182,6 +197,21 @@ namespace eBookShop.Migrations
                     b.HasOne("eBookShop.Models.Order", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BookUser", b =>
+                {
+                    b.HasOne("eBookShop.Models.Book", null)
+                        .WithMany()
+                        .HasForeignKey("LikedBooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eBookShop.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersWhoLikeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

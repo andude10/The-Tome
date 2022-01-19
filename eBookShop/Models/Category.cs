@@ -2,6 +2,7 @@
 
 namespace eBookShop.Models;
 
+//TODO: implement cloning
 public class Category
 {
     [Key] public int Id { get; set; }

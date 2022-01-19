@@ -8,5 +8,8 @@ public class User
     public string Name { get; set; }
     [Required] public string Email { get; set; }
     public string Password { get; set; }
-    public virtual List<Order> Orders { get; private set; } = new();
+    public virtual List<Book> LikedBooks { get; set; } = new();
+    
+    /// User must contain at least one Order
+    public virtual List<Order> Orders { get; set; } = new();
 }

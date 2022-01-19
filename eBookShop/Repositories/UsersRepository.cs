@@ -1,3 +1,5 @@
+using System.Reflection;
+using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
 using Microsoft.EntityFrameworkCore;
@@ -6,63 +8,89 @@ namespace eBookShop.Repositories;
 
 public class UsersRepository : IUsersRepository
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
     public UsersRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _dbContext = contextFactory.CreateDbContext();
+        _contextFactory = contextFactory;
     }
-
+    
+    /// <summary>
+    /// GetUser returns a user WITHOUT associated data. To load related data, you need to use the LoadList() methods
+    /// </summary>
+    /// <returns>User WITHOUT associated data</returns>
+    /// User must contain at least one Order
     public User? GetUser(string email)
     {
-        return _dbContext.Users.FirstOrDefault(u => u.Email == email);
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Users.FirstOrDefault(u => u.Email == email);
     }
 
+    /// <summary>
+    /// Loads all liked books of the book
+    /// </summary>
+    /// TODO: Explain what's going on here
+    public void LoadLikedBooks(ref User user)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var email = user.Email;
+        var obj = new User();
+        obj.LikedBooks = dbContext.Users.First(u => u.Email == email).LikedBooks;
+        user = obj;
+        
+        dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
+    }
+
+    /// <summary>
+    /// Loads all user orders
+    /// </summary>
+    /// TODO: Explain what's going on here
+    public void LoadOrders(ref User user)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var email = user.Email;
+        user = dbContext.Users.First(u => u.Email == email);
+        
+        dbContext.Entry(user).Collection(u => u!.Orders).Load();
+    }
+
+    /// <summary>
+    /// Finds a user by name and password. Used for registration and authentication
+    /// </summary>
+    /// <param name="email">The user email</param>
+    /// <param name="password">The user password</param>
+    /// <returns></returns>
     public User? FindUser(string email, string password)
     {
-        return _dbContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
     }
 
     public void Create(User item)
     {
-        _dbContext.Add(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Add(item);
+        dbContext.SaveChanges();
     }
 
     public void Update(User item)
     {
-        _dbContext.Update(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Update(item);
+        dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        var user = _dbContext.Users.Find(id);
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var user = dbContext.Users.Find(id);
 
         if (user == null) return;
 
-        _dbContext.Users.Remove(user);
-        _dbContext.SaveChanges();
+        dbContext.Users.Remove(user);
+        dbContext.SaveChanges();
     }
-    
-    #region Dispose interface
-    private bool _disposed = false;
-    protected virtual void Dispose(bool disposing)
-    {
-        if(!_disposed)
-        {
-            if(disposing)
-            {
-                _dbContext.Dispose();
-            }
-        }
-        _disposed = true;
-    }
- 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
 }

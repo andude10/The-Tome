@@ -6,57 +6,58 @@ namespace eBookShop.Repositories;
 
 public class OrdersRepository : IOrdersRepository
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _contextFactory;
     public OrdersRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _dbContext = contextFactory.CreateDbContext();
+        _contextFactory = contextFactory;
     }
 
+    /// <summary>
+    /// GetOrder returns a order WITHOUT associated data. To load related data, you need to use the LoadList() methods
+    /// </summary>
+    /// <returns>Order WITHOUT associated data</returns>
     public Order? GetOrder(int id)
     {
-        return _dbContext.Orders.Find(id);
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Orders.Find(id);
     }
 
-    public void Create(Order item)
+    /// <summary>
+    /// Loads all books in an order
+    /// </summary>
+    public void LoadBooks(ref Order order)
     {
-        _dbContext.Add(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var id = order.Id;
+        order = dbContext.Orders.First(u => u.Id == id);
+        
+        dbContext.Entry(order).Collection(o => o.Books).Load();
     }
 
-    public void Update(Order item)
+    public void Create(Order order)
     {
-        _dbContext.Update(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Add(order);
+        dbContext.SaveChanges();
+    }
+
+    public void Update(Order order)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Update(order);
+        dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        var order = _dbContext.Orders.Find(id);
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var order = dbContext.Orders.Find(id);
 
         if (order == null) return;
 
-        _dbContext.Orders.Remove(order);
-        _dbContext.SaveChanges();
+        dbContext.Orders.Remove(order);
+        dbContext.SaveChanges();
     }
-    
-    #region Dispose interface
-    private bool _disposed = false;
-    protected virtual void Dispose(bool disposing)
-    {
-        if(!_disposed)
-        {
-            if(disposing)
-            {
-                _dbContext.Dispose();
-            }
-        }
-        _disposed = true;
-    }
- 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
 }

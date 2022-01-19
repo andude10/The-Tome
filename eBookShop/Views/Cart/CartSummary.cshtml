@@ -8,12 +8,12 @@
     <h1>Cart</h1>
     
     <div class="card card-body col-sm-7 m-2">
-        @Html.Partial("_book-list", model: Model.Books)
+        @await Html.PartialAsync("_book-list", model: Model?.CatalogViewModel)
     </div>
 
     <div class="card card-body col-sm-1 m-2">
         <p class="card p-2 m-1">Total price: @Model.TotalPrice$</p>
-        <p class="card p-2 m-1">Number of books: @Model.Books.Count()</p>
+        <p class="card p-2 m-1">Number of books: @Model.CatalogViewModel.Books.Count()</p>
         <p class="card p-2 m-1">Order id: @Model.OrderId</p>
         <div class="card p-2 m-1">
             <p class="p-1">In stores tomorrow (from 11:00)</p>

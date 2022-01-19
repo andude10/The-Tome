@@ -6,58 +6,42 @@ namespace eBookShop.Repositories;
 
 public class CategoriesRepository : ICategoriesRepository
 {
-    private readonly AppDbContext _dbContext;
+    private readonly IDbContextFactory<AppDbContext> _contextFactory;
 
     public CategoriesRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
-        _dbContext = contextFactory.CreateDbContext();
+        _contextFactory = contextFactory;
     }
 
     public Category? FindCategory(string name)
     {
-        return _dbContext.Categories.FirstOrDefault(c => c.Name == name);
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Categories.FirstOrDefault(c => c.Name == name);
     }
 
     public void Create(Category item)
     {
-        _dbContext.Add(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Add(item);
+        dbContext.SaveChanges();
     }
 
     public void Update(Category item)
     {
-        _dbContext.Update(item);
-        _dbContext.SaveChanges();
+        using var dbContext = _contextFactory.CreateDbContext();
+        dbContext.Update(item);
+        dbContext.SaveChanges();
     }
 
     public void Delete(int id)
     {
-        var category = _dbContext.Categories.Find(id);
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var category = dbContext.Categories.Find(id);
 
         if (category == null) return;
 
-        _dbContext.Categories.Remove(category);
-        _dbContext.SaveChanges();
+        dbContext.Categories.Remove(category);
+        dbContext.SaveChanges();
     }
-
-    #region Dispose interface
-    private bool _disposed = false;
-    protected virtual void Dispose(bool disposing)
-    {
-        if(!_disposed)
-        {
-            if(disposing)
-            {
-                _dbContext.Dispose();
-            }
-        }
-        _disposed = true;
-    }
- 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-    #endregion
 }

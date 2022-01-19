@@ -1,15 +1,18 @@
+using eBookShop.Data;
 using eBookShop.Models;
+using eBookShop.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.ViewModels;
 
 public class BookViewerViewModel
 {
-    public BookViewerViewModel(User user, Book book)
+    public BookViewerViewModel(bool isBought, Book book)
     {
-        User = user;
+        IsBought = isBought;
         Book = book;
     }
-    public User User { get; set; }
+    
     public Book Book { get; set; }
-    public bool IsBought => User.Orders.Last().Books.Exists(b => b.Id == Book.Id);
+    public bool IsBought { get; set; }
 }
