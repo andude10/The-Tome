@@ -8,12 +8,10 @@ namespace eBookShop.Repositories;
 public class BooksRepository : IBooksRepository
 {
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
-    private readonly UsersRepository _usersRepository;
 
     public BooksRepository(IDbContextFactory<AppDbContext> contextFactory)
     {
         _contextFactory = contextFactory;
-        _usersRepository = new UsersRepository(contextFactory);
     }
 
     /// <summary>
@@ -91,16 +89,16 @@ public class BooksRepository : IBooksRepository
         using var dbContext = _contextFactory.CreateDbContext();
         
         var book = dbContext.Books.Find(bookId);
+        var user = dbContext.Users.First(u => u.Email == email);
 
-        if (book == null)
+        if (book == null || user == null)
         {
             return;
         }
         
-        var user = _usersRepository.GetUser(email);
-        Debug.Assert(user != null, nameof(user) + " != null");
-        
-        if (user.LikedBooks.Any(b => b.Id == bookId))
+        dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
+
+        if (user.LikedBooks.Exists(b => b.Id == bookId))
         {
             book.Stars -= 1;
             book.UsersWhoLike.Remove(user);

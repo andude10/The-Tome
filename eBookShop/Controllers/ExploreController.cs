@@ -15,12 +15,14 @@ public class ExploreController : Controller
     private const int PageSize = 12;
     private readonly IBooksRepository _booksRepository;
     private readonly IUsersRepository _usersRepository;
+    private readonly IOrdersRepository _ordersRepository;
     private List<Book> _books;
 
     public ExploreController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _booksRepository = new BooksRepository(contextFactory);
         _usersRepository = new UsersRepository(contextFactory);
+        _ordersRepository = new OrdersRepository(contextFactory);
         _books = _booksRepository.GetBooks().ToList();
     }
 
@@ -56,20 +58,24 @@ public class ExploreController : Controller
         _usersRepository.LoadLikedBooks(user);
         _usersRepository.LoadOrders(user);
 
+        var cart = user.Orders.Last();
+        _ordersRepository.LoadBooks(cart);
+
         return user.Orders.Last().Books.IsNullOrEmpty()
             ? View(new BookViewerViewModel(false, book))
-            : View(new BookViewerViewModel(user.Orders.Last().Books.Exists(b => b.Id == book.Id), book));
+            : View(new BookViewerViewModel(cart.Books.Exists(b => b.Id == book.Id), book));
     }
 
     /// <summary>
-    /// The GiveStarToBook give a star to book
+    /// Current user likes book
     /// </summary>
+    /// <param name="bookId">The book id</param>
     /// <returns></returns>
     [Authorize]
     public IActionResult GiveStarToBook(int bookId)
     {
         _booksRepository.GiveStarToBook(bookId, User.Identity.Name);
-        return new EmptyResult();
+        return new NoContentResult();
     }
 
     /// <summary>

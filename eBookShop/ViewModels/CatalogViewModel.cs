@@ -7,11 +7,11 @@ public class CatalogViewModel
 {
     public CatalogViewModel(IEnumerable<Book> books, IEnumerable<Book> booksLikedByUser)
     {
-        Books = books;
-        BooksLikedByUser = booksLikedByUser;
+        Books = books.ToList();
+        BooksLikedByUser = booksLikedByUser.ToList();
     }
     
-    public IEnumerable<Book> BooksLikedByUser { get; set; }
+    public List<Book> BooksLikedByUser { get; set; }
 
-    public IEnumerable<Book> Books { get; set; }
+    public List<Book> Books { get; set; }
 }

@@ -21,9 +21,9 @@
                         <a asp-controller="Explore" asp-action="GiveStarToBook" asp-route-bookId="@obj.Id"
                            class="p-2 col-sm-6 text-xl-end bg-white border-0" role="button" >
                             @{
-                                var starIcon = Model.BooksLikedByUser.Any(b => b.Id != obj.Id)
-                                    ? "https://img.icons8.com/ios/48/000000/star--v1.png" 
-                                    : "https://img.icons8.com/ios-filled/48/000000/star--v1.png";
+                                var starIcon = Model.BooksLikedByUser.Exists(b => b.Id == obj.Id) 
+                                    ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png" 
+                                    : "https://img.icons8.com/ios/48/000000/star--v1.png";
                             }
                             <img class="img-fluid" style="width: 30px; height: 30px" src="@starIcon" alt="LikeIt"/>
                         </a>
