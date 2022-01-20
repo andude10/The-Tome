@@ -13,17 +13,17 @@ public interface IBooksRepository
     /// <summary>
     /// Loads all orders of the book
     /// </summary>
-    void LoadBookOrders(ref Book book);
+    void LoadBookOrders(Book book);
     
     /// <summary>
     /// Loads all users who liked the book
     /// </summary>
-    void LoadUsersWhoLike(ref Book book);
+    void LoadUsersWhoLike(Book book);
     
     /// <summary>
     /// Loads all categories the book belongs to
     /// </summary>
-    void LoadCategories(ref Book book);
+    void LoadCategories(Book book);
     
     /// <summary>
     /// Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods

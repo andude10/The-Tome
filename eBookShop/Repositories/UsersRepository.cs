@@ -30,30 +30,32 @@ public class UsersRepository : IUsersRepository
     /// Loads all liked books of the book
     /// </summary>
     /// TODO: Explain what's going on here
-    public void LoadLikedBooks(ref User user)
+    public void LoadLikedBooks(User user)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var email = user.Email;
-        var obj = new User();
-        obj.LikedBooks = dbContext.Users.First(u => u.Email == email).LikedBooks;
-        user = obj;
+        var userInContext = dbContext.Users.First(u => u.Email == email);
         
-        dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
+        dbContext.Entry(userInContext).Collection(u => u!.LikedBooks).Load();
+        
+        user.LikedBooks = userInContext.LikedBooks;
     }
 
     /// <summary>
     /// Loads all user orders
     /// </summary>
     /// TODO: Explain what's going on here
-    public void LoadOrders(ref User user)
+    public void LoadOrders(User user)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var email = user.Email;
-        user = dbContext.Users.First(u => u.Email == email);
+        var userInContext = dbContext.Users.First(u => u.Email == email);
         
-        dbContext.Entry(user).Collection(u => u!.Orders).Load();
+        dbContext.Entry(userInContext).Collection(u => u!.Orders).Load();
+        
+        user.Orders = userInContext.Orders;
     }
 
     /// <summary>

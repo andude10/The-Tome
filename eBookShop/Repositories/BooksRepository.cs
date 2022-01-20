@@ -29,40 +29,46 @@ public class BooksRepository : IBooksRepository
     /// <summary>
     /// Loads all orders of the book
     /// </summary>
-    public void LoadBookOrders(ref Book book)
+    public void LoadBookOrders(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var id = book.Id;
-        book = dbContext.Books.First(u => u.Id == id);
+        var bookInContext = dbContext.Books.First(u => u.Id == id);
         
-        dbContext.Entry(book).Collection(b => b!.Orders).Load();
+        dbContext.Entry(bookInContext).Collection(b => b!.Orders).Load();
+
+        book.Orders = bookInContext.Orders;
     }
     
     /// <summary>
     /// Loads all users who liked the book
     /// </summary>
-    public void LoadUsersWhoLike(ref Book book)
+    public void LoadUsersWhoLike(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var id = book.Id;
-        book = dbContext.Books.First(u => u.Id == id);
+        var bookInContext = dbContext.Books.First(u => u.Id == id);
+        
+        dbContext.Entry(bookInContext).Collection(b => b!.UsersWhoLike).Load();
 
-        dbContext.Entry(book).Collection(b => b!.UsersWhoLike).Load();
+        book.UsersWhoLike = bookInContext.UsersWhoLike;
     }
     
     /// <summary>
     /// Loads all categories the book belongs to
     /// </summary>
-    public void LoadCategories(ref Book book)
+    public void LoadCategories(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var id = book.Id;
-        book = dbContext.Books.First(u => u.Id == id);
+        var bookInContext = dbContext.Books.First(u => u.Id == id);
+        
+        dbContext.Entry(bookInContext).Collection(b => b!.Categories).Load();
 
-        dbContext.Entry(book).Collection(b => b!.Categories).Load();
+        book.Categories = bookInContext.Categories;
     }
     
     /// <summary>

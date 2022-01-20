@@ -14,12 +14,12 @@ public interface IUsersRepository
     /// <summary>
     /// Loads all liked books of the book
     /// </summary>
-    void LoadLikedBooks(ref User user);
+    void LoadLikedBooks(User user);
     
     /// <summary>
     /// Loads all user orders
     /// </summary>
-    void LoadOrders(ref User user);
+    void LoadOrders(User user);
     
     /// <summary>
     /// Finds a user by name and password. Used for registration and authentication

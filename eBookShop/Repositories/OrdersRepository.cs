@@ -25,14 +25,15 @@ public class OrdersRepository : IOrdersRepository
     /// <summary>
     /// Loads all books in an order
     /// </summary>
-    public void LoadBooks(ref Order order)
+    public void LoadBooks(Order order)
     {
         using var dbContext = _contextFactory.CreateDbContext();
         
         var id = order.Id;
-        order = dbContext.Orders.First(u => u.Id == id);
-        
-        dbContext.Entry(order).Collection(o => o.Books).Load();
+        var orderInContext = dbContext.Orders.First(o => o.Id == id);
+        dbContext.Entry(orderInContext).Collection(o => o!.Books).Load();
+
+        order.Books = orderInContext.Books;
     }
 
     public void Create(Order order)

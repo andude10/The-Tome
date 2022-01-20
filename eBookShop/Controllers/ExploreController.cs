@@ -31,7 +31,7 @@ public class ExploreController : Controller
 
         var user = _usersRepository.GetUser(User.Identity.Name);
         Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadLikedBooks(ref user);
+        _usersRepository.LoadLikedBooks( user);
         
         var viewModel = new ExploreIndexViewModel
         {
@@ -53,8 +53,8 @@ public class ExploreController : Controller
             return NotFound();
         }
         
-        _usersRepository.LoadLikedBooks(ref user);
-        _usersRepository.LoadOrders(ref user);
+        _usersRepository.LoadLikedBooks(user);
+        _usersRepository.LoadOrders(user);
 
         return user.Orders.Last().Books.IsNullOrEmpty()
             ? View(new BookViewerViewModel(false, book))
@@ -84,7 +84,7 @@ public class ExploreController : Controller
         {
             SortBookState.Popular => books.OrderBy(b =>
             {
-                _booksRepository.LoadBookOrders(ref b);
+                _booksRepository.LoadBookOrders(b);
                 return b.Orders.Count;
             }),
             SortBookState.HighRating => books.OrderBy(b => b.Stars),

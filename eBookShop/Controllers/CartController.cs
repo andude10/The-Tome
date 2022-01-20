@@ -29,11 +29,11 @@ public class CartController : Controller
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
         Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadOrders(ref user);
-        _usersRepository.LoadLikedBooks(ref user);
+        _usersRepository.LoadOrders(user);
+        _usersRepository.LoadLikedBooks( user);
 
         var cart = user.Orders.Last();
-        _ordersRepository.LoadBooks(ref cart);
+        _ordersRepository.LoadBooks(cart);
         var books = cart.Books;
 
         var cartVm = new CartViewModel()
@@ -51,7 +51,7 @@ public class CartController : Controller
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
         Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadOrders(ref user);
+        _usersRepository.LoadOrders(user);
         
         var book = _booksRepository.GetBook(bookId);
 
@@ -65,7 +65,7 @@ public class CartController : Controller
         }
         else
         {
-            _ordersRepository.LoadBooks(ref cart);
+            _ordersRepository.LoadBooks(cart);
             cart.Books.Add(book);
         }
         
