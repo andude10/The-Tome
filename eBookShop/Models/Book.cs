@@ -2,8 +2,7 @@
 
 namespace eBookShop.Models;
 
-//TODO: implement cloning
-public class Book : ICloneable
+public class Book 
 {
     [Key] public int Id { get; set; }
     public string Title { get; set; }
@@ -16,16 +15,4 @@ public class Book : ICloneable
     public virtual List<Category> Categories { get; set; } = new();
     public virtual List<User> UsersWhoLike { get; set; } = new();
     public virtual List<Order> Orders { get; set; } = new();
-    public object Clone()
-    {
-        var book = (Book)MemberwiseClone();
-
-        book.Categories = new List<Category>(Categories);
-
-        book.UsersWhoLike = new List<User>(UsersWhoLike);
-
-        book.Orders = new List<Order>(Orders);
-
-        return book;
-    }
 }

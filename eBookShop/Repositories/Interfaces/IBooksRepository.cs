@@ -1,6 +1,6 @@
 using eBookShop.Models;
 
-namespace eBookShop.Repositories;
+namespace eBookShop.Repositories.Interfaces;
 
 public interface IBooksRepository
 {

@@ -2,7 +2,8 @@ using System.Diagnostics;
 using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
-using eBookShop.Repositories;
+using eBookShop.Repositories.Implementations;
+using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eBookShop.Controllers;
 
-public class ExploreController : Controller
+public class MarketController : Controller
 {
     private const int PageSize = 12;
     private readonly IBooksRepository _booksRepository;
@@ -18,7 +19,7 @@ public class ExploreController : Controller
     private readonly IOrdersRepository _ordersRepository;
     private List<Book> _books;
 
-    public ExploreController(IDbContextFactory<AppDbContext> contextFactory)
+    public MarketController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _booksRepository = new BooksRepository(contextFactory);
         _usersRepository = new UsersRepository(contextFactory);

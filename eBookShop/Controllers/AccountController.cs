@@ -2,6 +2,8 @@ using System.Security.Claims;
 using eBookShop.Data;
 using eBookShop.Models;
 using eBookShop.Repositories;
+using eBookShop.Repositories.Implementations;
+using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

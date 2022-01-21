@@ -1,23 +1,13 @@
 @model User
 
 <div class="pt-3 row">
-    <div class="text-center p-3 card display-6 col-sm-6">
+    <div class="text-center p-3 card col-sm-5 m-3">
         <img class="center-img img-fluid" src="" alt="Photo" style="height: 400px; width: 400px; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem"/>
-        <p class="card-text pt-2">@Model.Name</p>
-        <p class="card-text">@Model.Email</p>
+        <h1 class="card-text pt-2">@Model.Name</h1>
+        <p>@Model.AboutUser text test text test text test text test text test text test text test text test text test</p>
     </div>
-    <div class="text-center col-sm-6">
-        <section class="card">
-            <h3 class="card-title card-header">About Me</h3>
-            <p class="card-text card-body">Description some thing and another thing andDescription some thing and another thing andDescription some thing and another thing andDescription some thing and another thing and</p>
-        </section>
-        <section class="card mt-3">
-            <h3 class="card-title card-header">About Me</h3>
-            <p class="card-text card-body">Description some thing and another thing andDescription some thing and another thing andDescription some thing and another thing andDescription some thing and another thing and</p>
-        </section>
-        <section class="card mt-3">
-            <h3 class="card-title card-header">About Me</h3>
-            <p class="card-text card-body">Description some thing and another thing andDescription some thing and another thing andDescription some thing and another thing andDescription some thing and another thing and</p>
-        </section>
+    <div class="text-center col-sm-6 m-3">
+        <h1 class="m-2 ">Last posts</h1>
+        @await Html.PartialAsync("_Posts", model: Model.Posts.Take(3))
     </div>
 </div>

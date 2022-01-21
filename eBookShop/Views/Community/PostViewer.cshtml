@@ -1,0 +1,16 @@
+@model eBookShop.Models.Post
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<div class="text-center m-5">
+    <img src="" class="round-img" alt="UserPhoto"></img>
+    <h1>@Model.Title</h1>
+    <h5>by @Model.User.Name</h5>
+</div>
+
+<div class="m-2 text-center">
+    @Html.Raw(Model.HtmlContent)
+</div>

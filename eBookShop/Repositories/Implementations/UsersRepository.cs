@@ -1,10 +1,9 @@
-using System.Reflection;
-using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
+using eBookShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eBookShop.Repositories;
+namespace eBookShop.Repositories.Implementations;
 
 public class UsersRepository : IUsersRepository
 {
@@ -24,6 +23,12 @@ public class UsersRepository : IUsersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
         return dbContext.Users.FirstOrDefault(u => u.Email == email);
+    }
+
+    public User? GetUser(int id)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Users.Find(id);
     }
 
     /// <summary>
@@ -56,6 +61,22 @@ public class UsersRepository : IUsersRepository
         dbContext.Entry(userInContext).Collection(u => u!.Orders).Load();
         
         user.Orders = userInContext.Orders;
+    }
+    
+    /// <summary>
+    /// Loads all user posts
+    /// </summary>
+    /// TODO: Explain what's going on here
+    public void LoadPosts(User user)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var email = user.Email;
+        var userInContext = dbContext.Users.First(u => u.Email == email);
+        
+        dbContext.Entry(userInContext).Collection(u => u!.Posts).Load();
+        
+        user.Posts = userInContext.Posts;
     }
 
     /// <summary>
@@ -90,7 +111,10 @@ public class UsersRepository : IUsersRepository
         
         var user = dbContext.Users.Find(id);
 
-        if (user == null) return;
+        if (user == null) 
+        {
+            throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
+        };
 
         dbContext.Users.Remove(user);
         dbContext.SaveChanges();

@@ -4,6 +4,8 @@ using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
 using eBookShop.Repositories;
+using eBookShop.Repositories.Implementations;
+using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,9 +1,9 @@
-using System.Diagnostics;
 using eBookShop.Data;
 using eBookShop.Models;
+using eBookShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eBookShop.Repositories;
+namespace eBookShop.Repositories.Implementations;
 
 public class BooksRepository : IBooksRepository
 {
@@ -93,8 +93,8 @@ public class BooksRepository : IBooksRepository
 
         if (book == null || user == null)
         {
-            return;
-        }
+            throw new KeyNotFoundException($"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
+        };
         
         dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
 
@@ -133,7 +133,10 @@ public class BooksRepository : IBooksRepository
         
         var book = dbContext.Books.Find(id);
 
-        if (book == null) return;
+        if (book == null) 
+        {
+            throw new KeyNotFoundException(id.ToString());
+        };
 
         dbContext.Books.Remove(book);
         dbContext.SaveChanges();

@@ -71,6 +71,10 @@ li {
     height: 768px;
 }
 
+.round-img {
+    border-radius: 100px; 
+}
+
 .row-full {
     width: 99.5vw;
     position: relative;

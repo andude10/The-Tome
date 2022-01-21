@@ -1,8 +1,9 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using eBookShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eBookShop.Repositories;
+namespace eBookShop.Repositories.Implementations;
 
 public class CategoriesRepository : ICategoriesRepository
 {
@@ -39,7 +40,10 @@ public class CategoriesRepository : ICategoriesRepository
         
         var category = dbContext.Categories.Find(id);
 
-        if (category == null) return;
+        if (category == null) 
+        {
+            throw new KeyNotFoundException($"Category with {id.ToString()} id is Not found");
+        };
 
         dbContext.Categories.Remove(category);
         dbContext.SaveChanges();

@@ -1,0 +1,21 @@
+@model IEnumerable<Post>
+
+@{
+    Layout = null;
+}
+
+<script>
+
+</script>
+
+@foreach (var obj in Model)
+{
+    <div class="card m-2">
+        <a asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
+            <h4 class="card-header text-center">@obj.Title</h4>
+        </a>
+        <div class="card-body">
+            @Html.Raw(obj.HtmlContent)
+        </div>
+    </div>
+}

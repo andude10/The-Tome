@@ -1,8 +1,9 @@
 using eBookShop.Data;
 using eBookShop.Models;
+using eBookShop.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace eBookShop.Repositories;
+namespace eBookShop.Repositories.Implementations;
 
 public class OrdersRepository : IOrdersRepository
 {
@@ -56,7 +57,10 @@ public class OrdersRepository : IOrdersRepository
         
         var order = dbContext.Orders.Find(id);
 
-        if (order == null) return;
+        if (order == null) 
+        {
+            throw new KeyNotFoundException($"Order with {id.ToString()} id is Not found");
+        };
 
         dbContext.Orders.Remove(order);
         dbContext.SaveChanges();
