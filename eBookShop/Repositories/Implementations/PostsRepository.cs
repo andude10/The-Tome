@@ -13,9 +13,9 @@ public class PostsRepository : IPostsRepository
     {
         _contextFactory = contextFactory;
     }
-    
+
     /// <summary>
-    /// GetUser returns a post WITHOUT associated data. To load related data, you need to use the LoadList() methods
+    ///     GetUser returns a post WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Post WITHOUT associated data</returns>
     public Post? GetPost(int id)
@@ -33,14 +33,14 @@ public class PostsRepository : IPostsRepository
     public void LoadPostAuthor(Post post)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var id = post.Id;
         var postInContext = dbContext.Posts.First(p => p.Id == id);
         dbContext.Entry(postInContext).Reference(p => p.User).Load();
 
         post.User = postInContext.User;
     }
-    
+
     public void Create(Post item)
     {
         using var dbContext = _contextFactory.CreateDbContext();
@@ -58,13 +58,11 @@ public class PostsRepository : IPostsRepository
     public void Delete(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var post = dbContext.Posts.Find(id);
 
-        if (post == null)
-        {
-            throw new KeyNotFoundException($"Post with {id.ToString()} id is Not found");
-        };
+        if (post == null) throw new KeyNotFoundException($"Post with {id.ToString()} id is Not found");
+        ;
 
         dbContext.Posts.Remove(post);
         dbContext.SaveChanges();

@@ -15,8 +15,9 @@
 <h5 class="card card-body m-3">Price: @Model.Book.Price$</h5>
 
 <button class="btn @buyNowBtn ms-3" asp-controller="Cart" asp-action="AddBookToCart" asp-route-bookId="@Model.Book.Id">
-    Buy now @if (Model.IsBought)
-            {
-                <div>(book in cart)</div>
-            }
+    Buy now
+    @if (Model.IsBought)
+    {
+        <div>(book in cart)</div>
+    }
 </button>

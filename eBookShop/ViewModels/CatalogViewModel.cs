@@ -1,17 +1,10 @@
-using eBookShop.Models;
-using eBookShop.Repositories;
+﻿using eBookShop.Models;
 
 namespace eBookShop.ViewModels;
 
 public class CatalogViewModel
 {
-    public CatalogViewModel(IEnumerable<Book> books, IEnumerable<Book> booksLikedByUser)
-    {
-        Books = books.ToList();
-        BooksLikedByUser = booksLikedByUser.ToList();
-    }
-    
-    public List<Book> BooksLikedByUser { get; set; }
-
-    public List<Book> Books { get; set; }
+    public BooksViewModel BooksViewModel { get; set; }
+    public PageViewModel PageViewModel { get; set; }
+    public SortBookState SortBookState { get; set; }
 }

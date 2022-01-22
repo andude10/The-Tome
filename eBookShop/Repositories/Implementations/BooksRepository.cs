@@ -15,7 +15,7 @@ public class BooksRepository : IBooksRepository
     }
 
     /// <summary>
-    /// GetBook returns a book WITHOUT associated data. To load related data, you need to use the LoadList() methods
+    ///     GetBook returns a book WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Book WITHOUT associated data</returns>
     public Book? GetBook(int id)
@@ -23,54 +23,54 @@ public class BooksRepository : IBooksRepository
         using var dbContext = _contextFactory.CreateDbContext();
         return dbContext.Books.Find(id);
     }
-    
+
     /// <summary>
-    /// Loads all orders of the book
+    ///     Loads all orders of the book
     /// </summary>
     public void LoadBookOrders(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var id = book.Id;
         var bookInContext = dbContext.Books.First(u => u.Id == id);
-        
+
         dbContext.Entry(bookInContext).Collection(b => b!.Orders).Load();
 
         book.Orders = bookInContext.Orders;
     }
-    
+
     /// <summary>
-    /// Loads all users who liked the book
+    ///     Loads all users who liked the book
     /// </summary>
     public void LoadUsersWhoLike(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var id = book.Id;
         var bookInContext = dbContext.Books.First(u => u.Id == id);
-        
+
         dbContext.Entry(bookInContext).Collection(b => b!.UsersWhoLike).Load();
 
         book.UsersWhoLike = bookInContext.UsersWhoLike;
     }
-    
+
     /// <summary>
-    /// Loads all categories the book belongs to
+    ///     Loads all categories the book belongs to
     /// </summary>
     public void LoadCategories(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var id = book.Id;
         var bookInContext = dbContext.Books.First(u => u.Id == id);
-        
+
         dbContext.Entry(bookInContext).Collection(b => b!.Categories).Load();
 
         book.Categories = bookInContext.Categories;
     }
-    
+
     /// <summary>
-    /// Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
+    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns></returns>
     public IEnumerable<Book> GetBooks()
@@ -80,22 +80,22 @@ public class BooksRepository : IBooksRepository
     }
 
     /// <summary>
-    /// The GiveStarToBook give a star to book
+    ///     The GiveStarToBook give a star to book
     /// </summary>
     /// <param name="email">Email of the user who likes</param>
     /// <param name="bookId">The book id</param>
     public void GiveStarToBook(int bookId, string email)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var book = dbContext.Books.Find(bookId);
         var user = dbContext.Users.First(u => u.Email == email);
 
         if (book == null || user == null)
-        {
-            throw new KeyNotFoundException($"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
-        };
-        
+            throw new KeyNotFoundException(
+                $"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
+        ;
+
         dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
 
         if (user.LikedBooks.Exists(b => b.Id == bookId))
@@ -130,13 +130,11 @@ public class BooksRepository : IBooksRepository
     public void Delete(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var book = dbContext.Books.Find(id);
 
-        if (book == null) 
-        {
-            throw new KeyNotFoundException(id.ToString());
-        };
+        if (book == null) throw new KeyNotFoundException(id.ToString());
+        ;
 
         dbContext.Books.Remove(book);
         dbContext.SaveChanges();

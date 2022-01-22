@@ -8,5 +8,6 @@ public class FeedViewModel
     {
         Posts = posts;
     }
+
     public IEnumerable<Post> Posts { get; set; }
 }

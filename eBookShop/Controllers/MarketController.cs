@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
@@ -15,8 +14,8 @@ public class MarketController : Controller
 {
     private const int PageSize = 12;
     private readonly IBooksRepository _booksRepository;
-    private readonly IUsersRepository _usersRepository;
     private readonly IOrdersRepository _ordersRepository;
+    private readonly IUsersRepository _usersRepository;
     private List<Book> _books;
 
     public MarketController(IDbContextFactory<AppDbContext> contextFactory)
@@ -32,14 +31,18 @@ public class MarketController : Controller
         _books = SortBook(_books, sortBookState).ToList();
         _books = _books.Skip((pageId - 1) * PageSize).Take(PageSize).ToList();
 
-        var user = _usersRepository.GetUser(User.Identity.Name);
-        Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadLikedBooks( user);
-        
-        var viewModel = new ExploreIndexViewModel
+        List<Book> likedBooks = null;
+        if (User.Identity is {IsAuthenticated: false})
+        {
+            var user = _usersRepository.GetUser(User.Identity.Name);
+            _usersRepository.LoadLikedBooks(user);
+            likedBooks = user.LikedBooks;
+        }
+
+        var viewModel = new CatalogViewModel
         {
             PageViewModel = new PageViewModel(_books.Count, pageId, PageSize),
-            CatalogViewModel = new CatalogViewModel(_books, user.LikedBooks),
+            BooksViewModel = new BooksViewModel(_books, likedBooks),
             SortBookState = sortBookState
         };
 
@@ -49,13 +52,10 @@ public class MarketController : Controller
     public IActionResult BookViewer(int bookId)
     {
         var book = _booksRepository.GetBook(bookId);
-        var user = _usersRepository.GetUser(User.Identity.Name);
-        
-        if (user == null || book == null)
-        {
-            return NotFound();
-        }
-        
+        var user = _usersRepository.GetUser(User.Identity?.Name);
+
+        if (user == null || book == null) return NotFound();
+
         _usersRepository.LoadLikedBooks(user);
         _usersRepository.LoadOrders(user);
 
@@ -68,7 +68,7 @@ public class MarketController : Controller
     }
 
     /// <summary>
-    /// Current user likes book
+    ///     Current user likes book
     /// </summary>
     /// <param name="bookId">The book id</param>
     /// <returns></returns>
@@ -80,7 +80,7 @@ public class MarketController : Controller
     }
 
     /// <summary>
-    /// The SortBook returns a sorted list of books.
+    ///     The SortBook returns a sorted list of books.
     /// </summary>
     /// <param name="books">The books</param>
     /// <param name="sortBookState">Sort state</param>

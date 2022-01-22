@@ -2,7 +2,7 @@
 
 namespace eBookShop.Models;
 
-public class Book 
+public class Book
 {
     [Key] public int Id { get; set; }
     public string Title { get; set; }

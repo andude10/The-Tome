@@ -37,13 +37,11 @@ public class CategoriesRepository : ICategoriesRepository
     public void Delete(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var category = dbContext.Categories.Find(id);
 
-        if (category == null) 
-        {
-            throw new KeyNotFoundException($"Category with {id.ToString()} id is Not found");
-        };
+        if (category == null) throw new KeyNotFoundException($"Category with {id.ToString()} id is Not found");
+        ;
 
         dbContext.Categories.Remove(category);
         dbContext.SaveChanges();

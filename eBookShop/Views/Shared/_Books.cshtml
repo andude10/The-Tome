@@ -1,4 +1,4 @@
-@model eBookShop.ViewModels.CatalogViewModel;
+@model eBookShop.ViewModels.BooksViewModel;
 @{
     Layout = null;
 }
@@ -22,7 +22,7 @@
             <div class="mt-3 book-presentation">
                 <div class="card-header">
                     <a asp-controller="Market" asp-action="BookViewer" asp-route-bookId="@obj.Id">
-                         <h5>@obj.Title</h5>
+                        <h5>@obj.Title</h5>
                     </a>
                     <p class="lead">@obj.Author</p>
                     <h4 style="margin-bottom: 0;">@obj.Stars stars</h4>
@@ -34,13 +34,13 @@
 
                         <a asp-controller="Market" asp-action="GiveStarToBook" asp-route-bookId="@obj.Id"
                            class="p-2 col-sm-3 text-xl-end bg-white border-0 hstack" role="button" onclick="pressLike(@obj.Id)">
-                            
+
                             @{
                                 var starIcon = Model.BooksLikedByUser.Exists(b => b.Id == obj.Id)
                                     ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
                                     : "https://img.icons8.com/ios/48/000000/star--v1.png";
                             }
-                            
+
                             <img class="img-fluid" style="width: 30px; height: 30px" src="@starIcon" alt="LikeIt" id="likeBtn-@obj.Id"/>
                         </a>
                     </div>

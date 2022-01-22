@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using Castle.Core.Internal;
 using eBookShop.Data;
 using eBookShop.Models;
-using eBookShop.Repositories;
 using eBookShop.Repositories.Implementations;
 using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
@@ -32,36 +30,36 @@ public class CartController : Controller
         var user = _usersRepository.GetUser(User.Identity.Name);
         Debug.Assert(user != null, nameof(user) + " != null");
         _usersRepository.LoadOrders(user);
-        _usersRepository.LoadLikedBooks( user);
+        _usersRepository.LoadLikedBooks(user);
 
         var cart = user.Orders.Last();
         _ordersRepository.LoadBooks(cart);
         var books = cart.Books;
 
-        var cartVm = new CartViewModel()
+        var cartVm = new CartViewModel
         {
             TotalPrice = books.Sum(b => b.Price),
             OrderId = user.Orders.Last().Id,
-            CatalogViewModel = new CatalogViewModel(books, user.LikedBooks)
+            BooksViewModel = new BooksViewModel(books, user.LikedBooks)
         };
 
         return View(cartVm);
     }
-    
+
     [Authorize]
     public void AddBookToCart(int bookId)
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
         Debug.Assert(user != null, nameof(user) + " != null");
         _usersRepository.LoadOrders(user);
-        
+
         var book = _booksRepository.GetBook(bookId);
 
         var cart = user.Orders.Last();
-        
+
         if (user.Orders.IsNullOrEmpty() || cart.IsCompleted)
         {
-            var order = new Order() { User = user, OrderDate = DateTime.Now };
+            var order = new Order {User = user, OrderDate = DateTime.Now};
             order.Books.Add(book);
             user.Orders.Add(order);
         }
@@ -70,7 +68,7 @@ public class CartController : Controller
             _ordersRepository.LoadBooks(cart);
             cart.Books.Add(book);
         }
-        
+
         _usersRepository.Update(user);
     }
 }

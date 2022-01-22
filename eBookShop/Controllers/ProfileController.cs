@@ -1,6 +1,4 @@
 using eBookShop.Data;
-using eBookShop.Models;
-using eBookShop.Repositories;
 using eBookShop.Repositories.Implementations;
 using eBookShop.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -11,8 +9,9 @@ namespace eBookShop.Controllers;
 
 public class ProfileController : Controller
 {
-    private readonly IUsersRepository _usersRepository;
     private readonly IDbContextFactory<AppDbContext> _contextFactory;
+    private readonly IUsersRepository _usersRepository;
+
     public ProfileController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _usersRepository = new UsersRepository(contextFactory);
@@ -22,13 +21,10 @@ public class ProfileController : Controller
     [Authorize]
     public IActionResult Info()
     {
-        var user = _usersRepository.GetUser(User.Identity.Name);
+        var user = _usersRepository.GetUser(User.Identity?.Name);
 
-        if (user == null)
-        {
-            return NotFound(user);
-        }
-        
+        if (user == null) return NotFound(user);
+
         _usersRepository.LoadOrders(user);
         _usersRepository.LoadLikedBooks(user);
         _usersRepository.LoadPosts(user);

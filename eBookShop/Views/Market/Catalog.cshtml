@@ -1,4 +1,4 @@
-@model eBookShop.ViewModels.ExploreIndexViewModel
+@model eBookShop.ViewModels.CatalogViewModel
 
 @{
     ViewData["Title"] = "Explore";
@@ -8,7 +8,7 @@
 
 <div class="row m-2">
     <div class="col-sm-3 card mt-3">
-        
+
     </div>
     <div class="col-sm-9">
         <div class="pt-3 hstack">
@@ -35,21 +35,17 @@
                         }
                     }
                 </a>
-        
-                <div class="dropdown-menu" >
-                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
-                       >Popular first</a>
-                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
-                       >Cheaper first</a>
-                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc"
-                       >More expensive first</a>
-                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating"
-                       >First with a high rating</a>
+
+                <div class="dropdown-menu">
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular">Popular first</a>
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc">Cheaper first</a>
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc">More expensive first</a>
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating">First with a high rating</a>
                 </div>
             </div>
         </div>
 
-        @await Html.PartialAsync("_Books", model: Model.CatalogViewModel)
+        @await Html.PartialAsync("_Books", Model.BooksViewModel)
     </div>
 </div>
 

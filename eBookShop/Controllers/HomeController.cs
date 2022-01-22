@@ -1,7 +1,5 @@
 ﻿using System.Diagnostics;
 using eBookShop.Data;
-using eBookShop.Models;
-using eBookShop.Repositories.Implementations;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
