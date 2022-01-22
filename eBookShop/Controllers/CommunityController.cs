@@ -1,6 +1,7 @@
 using eBookShop.Data;
 using eBookShop.Repositories.Implementations;
 using eBookShop.Repositories.Interfaces;
+using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,5 +28,12 @@ public class CommunityController : Controller
         _postsRepository.LoadPostAuthor(post);
         
         return View(post);
+    }
+    
+    public IActionResult Feed()
+    {
+        var posts = _postsRepository.GetPosts();
+        
+        return View(new FeedViewModel(posts));
     }
 }

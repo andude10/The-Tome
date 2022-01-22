@@ -17,19 +17,11 @@ html {
 .book-presentation {
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0.25rem;
+    transition: transform .2s
 }
 
 .book-presentation:hover {
-    transition: all 0.3s ease;
-    box-shadow: 1px 1px #437ee5,
-    2px 2px #437ee5,
-    3px 3px #437ee5,
-    4px 4px #437ee5,
-    5px 5px #437ee5,
-    6px 6px #437ee5,
-    7px 7px #437ee5;
-    -webkit-transform: translateX(-7px);
-    transform: translateX(-7px);
+    transform: scale(1.05);
 }
 
 #footer {

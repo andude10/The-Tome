@@ -10,7 +10,7 @@
 
 @foreach (var obj in Model)
 {
-    <div class="card m-2">
+    <div class="card m-4">
         <a asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
             <h4 class="card-header text-center">@obj.Title</h4>
         </a>

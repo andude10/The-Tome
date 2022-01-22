@@ -10,8 +10,13 @@ public interface IPostsRepository
     /// <returns>Post WITHOUT associated data</returns>
     Post? GetPost(int id);
 
+    IEnumerable<Post> GetPosts();
+
     void LoadPostAuthor(Post post);
+    
     void Create(Post item);
+    
     void Update(Post item);
+    
     void Delete(int id);
 }

@@ -1,0 +1,7 @@
+@model eBookShop.ViewModels.FeedViewModel
+
+<h2>Feed</h2>
+
+<div>
+    @await Html.PartialAsync("_Posts", Model.Posts)
+</div>

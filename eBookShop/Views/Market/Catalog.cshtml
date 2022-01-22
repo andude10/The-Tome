@@ -37,13 +37,13 @@
                 </a>
         
                 <div class="dropdown-menu" >
-                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular"
                        >Popular first</a>
-                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc"
                        >Cheaper first</a>
-                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc"
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc"
                        >More expensive first</a>
-                    <a class="dropdown-item sort-button" asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating"
+                    <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating"
                        >First with a high rating</a>
                 </div>
             </div>
@@ -55,9 +55,9 @@
 
 <ul class="pagination justify-content-center m-3">
     <li class="page-item @hasPreviousPage">
-        <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Previous</a>
+        <a asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Previous</a>
     </li>
     <li class="page-item @hasNextPage">
-        <a asp-action="Index" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Next</a>
+        <a asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortBookState="@Model.SortBookState" class="page-link">Next</a>
     </li>
 </ul>

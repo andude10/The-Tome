@@ -3,6 +3,18 @@
     Layout = null;
 }
 
+<script>
+    function pressLike(id) {
+        var image = document.getElementById("likeBtn-" + id);
+        if (image.src === "https://img.icons8.com/ios/48/000000/star--v1.png") {
+            image.src = "https://img.icons8.com/ios-filled/48/000000/star--v1.png";
+        }
+        else {
+            image.src = "https://img.icons8.com/ios/48/000000/star--v1.png";
+        }
+    }
+</script>
+
 <div class="row" id="book-list">
     @foreach (var obj in Model.Books)
     {
@@ -13,19 +25,23 @@
                          <h5>@obj.Title</h5>
                     </a>
                     <p class="lead">@obj.Author</p>
+                    <h4 style="margin-bottom: 0;">@obj.Stars stars</h4>
                 </div>
                 <div class="card-body" style="height: 370px;">
                     <img class="img-fluid" src="@obj.CoverUrl" alt="Cover" style="height: 280px; width: auto"/>
                     <div class="row mt-3">
-                        <h4 class="col-sm-6 text-center text-xl-start">@obj.Price$</h4>
+                        <h4 class="col-sm-9 text-center text-xl-start">@obj.Price$</h4>
+
                         <a asp-controller="Market" asp-action="GiveStarToBook" asp-route-bookId="@obj.Id"
-                           class="p-2 col-sm-6 text-xl-end bg-white border-0" role="button" >
+                           class="p-2 col-sm-3 text-xl-end bg-white border-0 hstack" role="button" onclick="pressLike(@obj.Id)">
+                            
                             @{
-                                var starIcon = Model.BooksLikedByUser.Exists(b => b.Id == obj.Id) 
-                                    ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png" 
+                                var starIcon = Model.BooksLikedByUser.Exists(b => b.Id == obj.Id)
+                                    ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
                                     : "https://img.icons8.com/ios/48/000000/star--v1.png";
                             }
-                            <img class="img-fluid" style="width: 30px; height: 30px" src="@starIcon" alt="LikeIt"/>
+                            
+                            <img class="img-fluid" style="width: 30px; height: 30px" src="@starIcon" alt="LikeIt" id="likeBtn-@obj.Id"/>
                         </a>
                     </div>
                 </div>

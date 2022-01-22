@@ -24,6 +24,12 @@ public class PostsRepository : IPostsRepository
         return dbContext.Posts.Find(id);
     }
 
+    public IEnumerable<Post> GetPosts()
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Posts.ToList();
+    }
+
     public void LoadPostAuthor(Post post)
     {
         using var dbContext = _contextFactory.CreateDbContext();

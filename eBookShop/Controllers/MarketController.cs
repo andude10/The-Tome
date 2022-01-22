@@ -27,7 +27,7 @@ public class MarketController : Controller
         _books = _booksRepository.GetBooks().ToList();
     }
 
-    public IActionResult Index(int pageId = 1, SortBookState sortBookState = SortBookState.Popular)
+    public IActionResult Catalog(int pageId = 1, SortBookState sortBookState = SortBookState.Popular)
     {
         _books = SortBook(_books, sortBookState).ToList();
         _books = _books.Skip((pageId - 1) * PageSize).Take(PageSize).ToList();

@@ -1,13 +1,12 @@
 @model User
 
 <div class="pt-3 row">
-    <div class="text-center p-3 card col-sm-5 m-3">
-        <img class="center-img img-fluid" src="" alt="Photo" style="height: 400px; width: 400px; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem"/>
+    <div class="text-center p-3 m-3">
+        <img class="center-img img-fluid round-img" src="" alt="Photo" style="height: 400px; width: 400px; border: 1px solid rgba(0, 0, 0, 0.125); border-radius: 0.25rem"/>
         <h1 class="card-text pt-2">@Model.Name</h1>
         <p>@Model.AboutUser text test text test text test text test text test text test text test text test text test</p>
     </div>
-    <div class="text-center col-sm-6 m-3">
-        <h1 class="m-2 ">Last posts</h1>
+    <div class="text-center m-3">
         @await Html.PartialAsync("_Posts", model: Model.Posts.Take(3))
     </div>
 </div>
