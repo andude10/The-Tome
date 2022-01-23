@@ -32,7 +32,7 @@ public class MarketController : Controller
         _books = _books.Skip((pageId - 1) * PageSize).Take(PageSize).ToList();
 
         List<Book> likedBooks = null;
-        if (User.Identity is {IsAuthenticated: false})
+        if (User.Identity is {IsAuthenticated: true})
         {
             var user = _usersRepository.GetUser(User.Identity.Name);
             _usersRepository.LoadLikedBooks(user);

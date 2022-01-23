@@ -36,7 +36,8 @@
                            class="p-2 col-sm-3 text-xl-end bg-white border-0 hstack" role="button" onclick="pressLike(@obj.Id)">
 
                             @{
-                                var starIcon = Model.BooksLikedByUser.Exists(b => b.Id == obj.Id)
+                                var isLiked = Model.BooksLikedByUser != null && Model.BooksLikedByUser.Exists(b => b.Id == obj.Id);
+                                var starIcon = isLiked
                                     ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
                                     : "https://img.icons8.com/ios/48/000000/star--v1.png";
                             }
