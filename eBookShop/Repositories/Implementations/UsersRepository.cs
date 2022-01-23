@@ -40,6 +40,9 @@ public class UsersRepository : IUsersRepository
         using var dbContext = _contextFactory.CreateDbContext();
 
         var email = user.Email;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var userInContext = dbContext.Users.First(u => u.Email == email);
 
         dbContext.Entry(userInContext).Collection(u => u!.LikedBooks).Load();
@@ -66,12 +69,14 @@ public class UsersRepository : IUsersRepository
     /// <summary>
     ///     Loads all user posts
     /// </summary>
-    /// TODO: Explain what's going on here
     public void LoadPosts(User user)
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
         var email = user.Email;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var userInContext = dbContext.Users.First(u => u.Email == email);
 
         dbContext.Entry(userInContext).Collection(u => u!.Posts).Load();
@@ -112,7 +117,6 @@ public class UsersRepository : IUsersRepository
         var user = dbContext.Users.Find(id);
 
         if (user == null) throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
-        ;
 
         dbContext.Users.Remove(user);
         dbContext.SaveChanges();

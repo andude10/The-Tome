@@ -35,6 +35,9 @@ public class PostsRepository : IPostsRepository
         using var dbContext = _contextFactory.CreateDbContext();
 
         var id = post.Id;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var postInContext = dbContext.Posts.First(p => p.Id == id);
         dbContext.Entry(postInContext).Reference(p => p.User).Load();
 
@@ -62,7 +65,6 @@ public class PostsRepository : IPostsRepository
         var post = dbContext.Posts.Find(id);
 
         if (post == null) throw new KeyNotFoundException($"Post with {id.ToString()} id is Not found");
-        ;
 
         dbContext.Posts.Remove(post);
         dbContext.SaveChanges();

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookShop", "eBookShop\eBookShop.csproj", "{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EC58EFA0-65ED-418F-B8C2-A93739441E5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

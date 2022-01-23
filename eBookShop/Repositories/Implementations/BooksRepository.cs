@@ -32,6 +32,9 @@ public class BooksRepository : IBooksRepository
         using var dbContext = _contextFactory.CreateDbContext();
 
         var id = book.Id;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var bookInContext = dbContext.Books.First(u => u.Id == id);
 
         dbContext.Entry(bookInContext).Collection(b => b!.Orders).Load();
@@ -47,6 +50,9 @@ public class BooksRepository : IBooksRepository
         using var dbContext = _contextFactory.CreateDbContext();
 
         var id = book.Id;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var bookInContext = dbContext.Books.First(u => u.Id == id);
 
         dbContext.Entry(bookInContext).Collection(b => b!.UsersWhoLike).Load();
@@ -62,6 +68,9 @@ public class BooksRepository : IBooksRepository
         using var dbContext = _contextFactory.CreateDbContext();
 
         var id = book.Id;
+        
+        // To use the Load() method and load an object's associated data,
+        // the object must be created in the current context
         var bookInContext = dbContext.Books.First(u => u.Id == id);
 
         dbContext.Entry(bookInContext).Collection(b => b!.Categories).Load();
@@ -92,9 +101,7 @@ public class BooksRepository : IBooksRepository
         var user = dbContext.Users.First(u => u.Email == email);
 
         if (book == null || user == null)
-            throw new KeyNotFoundException(
-                $"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
-        ;
+            throw new KeyNotFoundException($"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
 
         dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
 
@@ -134,7 +141,6 @@ public class BooksRepository : IBooksRepository
         var book = dbContext.Books.Find(id);
 
         if (book == null) throw new KeyNotFoundException(id.ToString());
-        ;
 
         dbContext.Books.Remove(book);
         dbContext.SaveChanges();
