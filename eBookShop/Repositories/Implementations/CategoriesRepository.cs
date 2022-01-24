@@ -14,10 +14,18 @@ public class CategoriesRepository : ICategoriesRepository
         _contextFactory = contextFactory;
     }
 
-    public Category? FindCategory(string name)
+    public Category FindCategory(string name)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Categories.FirstOrDefault(c => c.Name == name);
+        
+        var category = dbContext.Categories.FirstOrDefault(c => c.Name == name);
+
+        if (category == null)
+        {
+            throw new KeyNotFoundException($"No category found with name {name}");
+        }
+        
+        return category;
     }
 
     public void Create(Category item)
@@ -40,7 +48,10 @@ public class CategoriesRepository : ICategoriesRepository
 
         var category = dbContext.Categories.Find(id);
 
-        if (category == null) throw new KeyNotFoundException($"Category with {id.ToString()} id is Not found");
+        if (category == null)
+        {
+            throw new KeyNotFoundException($"Category with {id.ToString()} id is Not found");
+        }
 
         dbContext.Categories.Remove(category);
         dbContext.SaveChanges();

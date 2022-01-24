@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using eBookShop.Data;
 using eBookShop.Models;
 using eBookShop.Repositories.Interfaces;
@@ -18,10 +19,19 @@ public class OrdersRepository : IOrdersRepository
     ///     GetOrder returns a order WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Order WITHOUT associated data</returns>
-    public Order? GetOrder(int id)
+    public Order GetOrder(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Orders.Find(id);
+        
+        var order = dbContext.Orders.First(o => o.Id == id);
+
+        if (order == null)
+        {
+            throw new KeyNotFoundException($"No order found with id {id}");
+        }
+        
+        Console.WriteLine($"DebugView: {dbContext.ChangeTracker.DebugView.ShortView}");
+        return order;
     }
 
     /// <summary>
@@ -30,15 +40,9 @@ public class OrdersRepository : IOrdersRepository
     public void LoadBooks(Order order)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-
-        var id = order.Id;
-        
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var orderInContext = dbContext.Orders.First(o => o.Id == id);
-        dbContext.Entry(orderInContext).Collection(o => o!.Books).Load();
-
-        order.Books = orderInContext.Books;
+        dbContext.Entry(order).State = EntityState.Unchanged;
+        dbContext.Entry(order).Collection(o => o.Books).Load();
+        dbContext.Entry(order).State = EntityState.Detached;
     }
 
     public void Create(Order order)
@@ -61,7 +65,10 @@ public class OrdersRepository : IOrdersRepository
 
         var order = dbContext.Orders.Find(id);
 
-        if (order == null) throw new KeyNotFoundException($"Order with {id.ToString()} id is Not found");
+        if (order == null)
+        {
+            throw new KeyNotFoundException($"Order with {id.ToString()} id is Not found");
+        }
 
         dbContext.Orders.Remove(order);
         dbContext.SaveChanges();

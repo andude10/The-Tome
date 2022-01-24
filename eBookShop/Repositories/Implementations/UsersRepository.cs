@@ -19,16 +19,32 @@ public class UsersRepository : IUsersRepository
     /// </summary>
     /// <returns>User WITHOUT associated data</returns>
     /// User must contain at least one Order
-    public User? GetUser(string email)
+    public User GetUser(string email)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Users.FirstOrDefault(u => u.Email == email);
+        
+        var user = dbContext.Users.FirstOrDefault(u => u.Email == email);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"No user found with email {email}");
+        }
+        
+        return user;
     }
 
-    public User? GetUser(int id)
+    public User GetUser(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Users.Find(id);
+        
+        var user = dbContext.Users.Find(id);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"No user found with id {id}");
+        }
+        
+        return user;
     }
 
     /// <summary>
@@ -73,15 +89,7 @@ public class UsersRepository : IUsersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
-        var email = user.Email;
-        
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var userInContext = dbContext.Users.First(u => u.Email == email);
-
-        dbContext.Entry(userInContext).Collection(u => u!.Posts).Load();
-
-        user.Posts = userInContext.Posts;
+        dbContext.Entry(user).Collection(u => u!.Posts).Load();
     }
 
     /// <summary>
@@ -94,6 +102,36 @@ public class UsersRepository : IUsersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
         return dbContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+    }
+
+    /// <summary>
+    ///     GetLastOrder returns a last user order WITHOUT associated data.
+    ///     To load related data, you need to use the LoadList() in OrdersRepository
+    /// </summary>
+    /// <returns>Order WITHOUT associated data</returns>
+    /// <param name="email">Email of the user whose last order will be returned</param>
+    public Order GetLastOrder(string email)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+
+        var user = dbContext.Users.FirstOrDefault(u => u.Email == email);
+
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with {email} email is Not found");
+        }
+
+        var order = dbContext.Entry(user)
+                             .Collection(u => u.Orders)
+                             .Query()
+                             .OrderBy(o => o.Id)
+                             .Last();
+        if (order == null)
+        {
+            throw new NullReferenceException($"No user (user id: {user.Id}) order was found. User must have at least one order");
+        }
+
+        return order;
     }
 
     public void Create(User item)
@@ -116,7 +154,10 @@ public class UsersRepository : IUsersRepository
 
         var user = dbContext.Users.Find(id);
 
-        if (user == null) throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
+        if (user == null)
+        {
+            throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
+        }
 
         dbContext.Users.Remove(user);
         dbContext.SaveChanges();

@@ -8,6 +8,6 @@ public class Order
     public DateTime OrderDate { get; set; } = DateTime.Now;
     public bool IsCompleted { get; set; } = false;
     public int UserId { get; set; }
-    public virtual User User { get; set; }
-    public virtual List<Book> Books { get; set; } = new();
+    public User User { get; set; }
+    public List<Book> Books { get; set; } = new();
 }

@@ -18,10 +18,18 @@ public class PostsRepository : IPostsRepository
     ///     GetUser returns a post WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Post WITHOUT associated data</returns>
-    public Post? GetPost(int id)
+    public Post GetPost(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Posts.Find(id);
+        
+        var post = dbContext.Posts.Find(id);
+
+        if (post == null)
+        {
+            throw new KeyNotFoundException($"No post found with id {id}");
+        }
+        
+        return post;
     }
 
     public IEnumerable<Post> GetPosts()
@@ -64,7 +72,10 @@ public class PostsRepository : IPostsRepository
 
         var post = dbContext.Posts.Find(id);
 
-        if (post == null) throw new KeyNotFoundException($"Post with {id.ToString()} id is Not found");
+        if (post == null)
+        {
+            throw new KeyNotFoundException($"Post with {id.ToString()} id is Not found");
+        }
 
         dbContext.Posts.Remove(post);
         dbContext.SaveChanges();

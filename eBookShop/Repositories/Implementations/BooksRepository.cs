@@ -18,10 +18,18 @@ public class BooksRepository : IBooksRepository
     ///     GetBook returns a book WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Book WITHOUT associated data</returns>
-    public Book? GetBook(int id)
+    public Book GetBook(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Books.Find(id);
+        
+        var book = dbContext.Books.Find(id);
+
+        if (book == null)
+        {
+            throw new KeyNotFoundException($"No book found with id {id}");
+        }
+        
+        return book;
     }
 
     /// <summary>
@@ -101,7 +109,9 @@ public class BooksRepository : IBooksRepository
         var user = dbContext.Users.First(u => u.Email == email);
 
         if (book == null || user == null)
-            throw new KeyNotFoundException($"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
+        {
+            throw new KeyNotFoundException($"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");   
+        }
 
         dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
 
@@ -140,7 +150,10 @@ public class BooksRepository : IBooksRepository
 
         var book = dbContext.Books.Find(id);
 
-        if (book == null) throw new KeyNotFoundException(id.ToString());
+        if (book == null)
+        {
+            throw new KeyNotFoundException(id.ToString());
+        }
 
         dbContext.Books.Remove(book);
         dbContext.SaveChanges();

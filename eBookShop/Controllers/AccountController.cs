@@ -57,9 +57,18 @@ public class AccountController : Controller
         if (!ModelState.IsValid) return View(model);
 
         var user = _usersRepository.FindUser(model.Email, model.Password);
+        
         if (user == null)
         {
-            _usersRepository.Create(new User {Email = model.Email, Password = model.Password, Name = model.Name});
+            _usersRepository.Create(new User
+            {
+                Email = model.Email, 
+                Password = model.Password, 
+                Name = model.Name,
+                
+                // User must contain at least one Order
+                Orders = new List<Order>() { new() }
+            });
 
             Authenticate(model.Email);
 

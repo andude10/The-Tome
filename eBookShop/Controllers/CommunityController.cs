@@ -20,8 +20,6 @@ public class CommunityController : Controller
     {
         var post = _postsRepository.GetPost(postId);
 
-        if (post == null) return NotFound(post);
-
         _postsRepository.LoadPostAuthor(post);
 
         return View(post);

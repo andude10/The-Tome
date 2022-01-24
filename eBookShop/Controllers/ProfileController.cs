@@ -23,8 +23,6 @@ public class ProfileController : Controller
     {
         var user = _usersRepository.GetUser(User.Identity?.Name);
 
-        if (user == null) return NotFound(user);
-
         _usersRepository.LoadOrders(user);
         _usersRepository.LoadLikedBooks(user);
         _usersRepository.LoadPosts(user);

@@ -28,47 +28,70 @@ public class CartController : Controller
     public IActionResult CartSummary()
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
-        Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadOrders(user);
         _usersRepository.LoadLikedBooks(user);
 
-        var cart = user.Orders.Last();
+        var cart = _usersRepository.GetLastOrder(user.Email);
         _ordersRepository.LoadBooks(cart);
-        var books = cart.Books;
-
-        var cartVm = new CartViewModel
+        
+        var cartViewModel = new CartViewModel
         {
-            TotalPrice = books.Sum(b => b.Price),
-            OrderId = user.Orders.Last().Id,
-            BooksViewModel = new BooksViewModel(books, user.LikedBooks)
+            TotalPrice = cart.Books.Sum(b => b.Price),
+            OrderId = cart.Id,
+            BooksViewModel = new BooksViewModel(cart.Books, user.LikedBooks, null)
         };
 
-        return View(cartVm);
+        return View(cartViewModel);
     }
-
+    
     [Authorize]
-    public void AddBookToCart(int bookId)
+    public IActionResult BuyBookToggle(int bookId)
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
-        Debug.Assert(user != null, nameof(user) + " != null");
-        _usersRepository.LoadOrders(user);
+        var lastOrder = _usersRepository.GetLastOrder(user.Email);
 
-        var book = _booksRepository.GetBook(bookId);
-
-        var cart = user.Orders.Last();
-
-        if (user.Orders.IsNullOrEmpty() || cart.IsCompleted)
+        _ordersRepository.LoadBooks(lastOrder);
+        
+        if (!lastOrder.Books.Exists(b => b.Id == bookId))
         {
-            var order = new Order {User = user, OrderDate = DateTime.Now};
-            order.Books.Add(book);
-            user.Orders.Add(order);
+            AddBookToCart(_booksRepository.GetBook(bookId), user);
         }
         else
         {
-            _ordersRepository.LoadBooks(cart);
-            cart.Books.Add(book);
+            RemoveBookFromCart(bookId, user);
         }
+        
+        return new NoContentResult();
+    }
 
-        _usersRepository.Update(user);
+    private void AddBookToCart(Book book, User user)
+    {
+        var lastOrder = _usersRepository.GetLastOrder(user.Email);
+        
+        if (lastOrder.IsCompleted)
+        {
+            var order = new Order { User = user, OrderDate = DateTime.Now };
+            order.Books.Add(book);
+            
+            _usersRepository.LoadOrders(user);
+            user.Orders.Add(order);
+            
+            _usersRepository.Update(user);
+        }
+        else
+        {
+            lastOrder.Books.Add(book);
+            _usersRepository.Update(user);
+        }
+    }
+    
+    private void RemoveBookFromCart(int bookId, User user)
+    {
+        var lastOrder = _usersRepository.GetLastOrder(user.Email);
+        _ordersRepository.LoadBooks(lastOrder);
+        
+        lastOrder.Books.RemoveAt(lastOrder.Books.FindIndex(b => b.Id  == bookId));
+        
+        // TODO: Fix the bug that occurs here
+        _ordersRepository.Update(lastOrder);
     }
 }

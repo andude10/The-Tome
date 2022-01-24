@@ -13,36 +13,71 @@
             image.src = "https://img.icons8.com/ios/48/000000/star--v1.png";
         }
     }
+    
+    function addToCart(id) {
+            var btn = document.getElementById("buyBtn-" + id);
+            if (btn.classList.contains("btn-primary")) {
+                btn.textContent = "Remove from cart";
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-danger")
+            }
+            else {
+                btn.textContent = "Buy now";
+                btn.classList.remove("btn-danger");
+                btn.classList.add("btn-primary")
+            }
+        }
 </script>
 
 <div class="row" id="book-list">
     @foreach (var obj in Model.Books)
     {
-        <div class="col-sm-6 text-center" style="width: 300px;">
-            <div class="mt-3 book-presentation">
+        <div class="col-sm-6 text-center" style="width: 275px;">
+            <div class="mt-3 book-presentation" style="height: 460px">
                 <div class="card-header">
                     <a asp-controller="Market" asp-action="BookViewer" asp-route-bookId="@obj.Id">
-                        <h5>@obj.Title</h5>
+                        <p>@obj.Title</p>
                     </a>
-                    <p class="lead">@obj.Author</p>
-                    <h4 style="margin-bottom: 0;">@obj.Stars stars</h4>
+                    <div>@obj.Author</div>
                 </div>
-                <div class="card-body" style="height: 370px;">
-                    <img class="img-fluid" src="@obj.CoverUrl" alt="Cover" style="height: 280px; width: auto"/>
+                <div class="card-body">
+                    <img class="img-fluid" src="@obj.CoverUrl" alt="Cover" style="height: 250px; width: auto"/>
                     <div class="row mt-3">
-                        <h4 class="col-sm-9 text-center text-xl-start">@obj.Price$</h4>
+                        <div class="align-middle align-middle mb-2">
+                            <strong class="text-center text-xl-start" >@obj.Price$</strong>
+                            <a asp-controller="Market" asp-action="GiveStarToBook" asp-route-bookId="@obj.Id"
+                               class="ms-1 mb-1 text-xl-end bg-white border-0" role="button" onclick="pressLike(@obj.Id)"
+                               style="height: 25px; width: 25px;">
+    
+                                @{
+                                    var isLiked = Model.BooksLikedByUser != null && Model.BooksLikedByUser.Exists(b => b.Id == obj.Id);
+                                    var starIcon = isLiked
+                                        ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
+                                        : "https://img.icons8.com/ios/48/000000/star--v1.png";
+                                }
+    
+                                <img class="img-fluid" style="height: 25px; width: 25px;" src="@starIcon" alt="LikeIt" id="likeBtn-@obj.Id"/>
+                            </a>
+                        </div>
 
-                        <a asp-controller="Market" asp-action="GiveStarToBook" asp-route-bookId="@obj.Id"
-                           class="p-2 col-sm-3 text-xl-end bg-white border-0 hstack" role="button" onclick="pressLike(@obj.Id)">
+                        @{
+                            var isObjBought = Model.BooksInCart != null &&
+                                              Model.BooksInCart.Exists(b => b.Id == obj.Id);
+                            var buyNowBtn = isObjBought ? "btn-danger" : "btn-primary";
+                        }
 
+                        <a class="btn @buyNowBtn" asp-controller="Cart" asp-action="BuyBookToggle" asp-route-bookId="@obj.Id"
+                           onclick="addToCart(@obj.Id)" id="buyBtn-@obj.Id">
                             @{
-                                var isLiked = Model.BooksLikedByUser != null && Model.BooksLikedByUser.Exists(b => b.Id == obj.Id);
-                                var starIcon = isLiked
-                                    ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
-                                    : "https://img.icons8.com/ios/48/000000/star--v1.png";
+                                if (isObjBought)
+                                {
+                                    <div>Remove from cart</div>
+                                }
+                                else
+                                {
+                                    <div>Buy now</div>
+                                }
                             }
-
-                            <img class="img-fluid" style="width: 30px; height: 30px" src="@starIcon" alt="LikeIt" id="likeBtn-@obj.Id"/>
                         </a>
                     </div>
                 </div>

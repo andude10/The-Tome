@@ -10,8 +10,8 @@ public class User
     public string Password { get; set; }
     public string AboutUser { get; set; }
     public List<Post> Posts { get; set; } = new();
-    public virtual List<Book> LikedBooks { get; set; } = new();
+    public List<Book> LikedBooks { get; set; } = new();
 
     /// User must contain at least one Order
-    public virtual List<Order> Orders { get; set; } = new();
+    public List<Order> Orders { get; set; } = new();
 }

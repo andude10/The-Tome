@@ -12,7 +12,7 @@ public class Book
     public Uri CoverUrl { get; set; }
     public DateTime CreatedDateTime { get; set; }
     public double Stars { get; set; }
-    public virtual List<Category> Categories { get; set; } = new();
-    public virtual List<User> UsersWhoLike { get; set; } = new();
-    public virtual List<Order> Orders { get; set; } = new();
+    public List<Category> Categories { get; set; } = new();
+    public List<User> UsersWhoLike { get; set; } = new();
+    public List<Order> Orders { get; set; } = new();
 }

@@ -5,6 +5,7 @@ using eBookShop.Repositories.Implementations;
 using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,22 +32,30 @@ public class MarketController : Controller
         _books = SortBook(_books, sortBookState).ToList();
         _books = _books.Skip((pageId - 1) * PageSize).Take(PageSize).ToList();
 
-        List<Book> likedBooks = null;
-        if (User.Identity is {IsAuthenticated: true})
+        var pageViewModel = new PageViewModel(_books.Count, pageId, PageSize);
+        
+        if (User.Identity is not {IsAuthenticated: true})
         {
-            var user = _usersRepository.GetUser(User.Identity.Name);
-            _usersRepository.LoadLikedBooks(user);
-            likedBooks = user.LikedBooks;
+            return View(new CatalogViewModel
+            {
+                PageViewModel = pageViewModel,
+                BooksViewModel = new BooksViewModel(_books, null, null),
+                SortBookState = sortBookState
+            });
         }
+        
+        var user = _usersRepository.GetUser(User.Identity.Name);
+        var cart = _usersRepository.GetLastOrder(user.Email);
 
-        var viewModel = new CatalogViewModel
+        _usersRepository.LoadLikedBooks(user);
+        _ordersRepository.LoadBooks(cart);
+
+        return View(new CatalogViewModel
         {
-            PageViewModel = new PageViewModel(_books.Count, pageId, PageSize),
-            BooksViewModel = new BooksViewModel(_books, likedBooks),
+            PageViewModel = pageViewModel,
+            BooksViewModel = new BooksViewModel(_books, user.LikedBooks, cart.Books),
             SortBookState = sortBookState
-        };
-
-        return View(viewModel);
+        });
     }
 
     public IActionResult BookViewer(int bookId)
@@ -54,13 +63,8 @@ public class MarketController : Controller
         var book = _booksRepository.GetBook(bookId);
         var user = _usersRepository.GetUser(User.Identity?.Name);
 
-        if (user == null || book == null) return NotFound();
-
         _usersRepository.LoadLikedBooks(user);
-        _usersRepository.LoadOrders(user);
-
-        var cart = user.Orders.Last();
-        _ordersRepository.LoadBooks(cart);
+        var cart = _usersRepository.GetLastOrder(user.Email);
 
         return user.Orders.Last().Books.IsNullOrEmpty()
             ? View(new BookViewerViewModel(false, book))

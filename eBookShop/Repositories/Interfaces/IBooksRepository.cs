@@ -8,7 +8,7 @@ public interface IBooksRepository
     ///     GetBook returns a book WITHOUT associated data. To load related data, you need to use the LoadList() methods
     /// </summary>
     /// <returns>Book WITHOUT associated data</returns>
-    Book? GetBook(int id);
+    Book GetBook(int id);
 
     /// <summary>
     ///     Loads all orders of the book
