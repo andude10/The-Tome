@@ -48,16 +48,17 @@ public class CartController : Controller
     {
         var user = _usersRepository.GetUser(User.Identity.Name);
         var lastOrder = _usersRepository.GetLastOrder(user.Email);
+        var book = _booksRepository.GetBook(bookId);
 
         _ordersRepository.LoadBooks(lastOrder);
         
         if (!lastOrder.Books.Exists(b => b.Id == bookId))
         {
-            AddBookToCart(_booksRepository.GetBook(bookId), user);
+            _ordersRepository.AddBookToOrder(lastOrder.Id, bookId, user.Id);
         }
         else
         {
-            RemoveBookFromCart(bookId, user);
+            _ordersRepository.RemoveBookFromOrder(lastOrder.Id, bookId);
         }
         
         return new NoContentResult();
@@ -80,18 +81,7 @@ public class CartController : Controller
         else
         {
             lastOrder.Books.Add(book);
-            _usersRepository.Update(user);
+            _ordersRepository.Update(lastOrder);
         }
-    }
-    
-    private void RemoveBookFromCart(int bookId, User user)
-    {
-        var lastOrder = _usersRepository.GetLastOrder(user.Email);
-        _ordersRepository.LoadBooks(lastOrder);
-        
-        lastOrder.Books.RemoveAt(lastOrder.Books.FindIndex(b => b.Id  == bookId));
-        
-        // TODO: Fix the bug that occurs here
-        _ordersRepository.Update(lastOrder);
     }
 }

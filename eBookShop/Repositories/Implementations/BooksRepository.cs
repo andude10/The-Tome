@@ -38,16 +38,9 @@ public class BooksRepository : IBooksRepository
     public void LoadBookOrders(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-
-        var id = book.Id;
-        
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var bookInContext = dbContext.Books.First(u => u.Id == id);
-
-        dbContext.Entry(bookInContext).Collection(b => b!.Orders).Load();
-
-        book.Orders = bookInContext.Orders;
+        dbContext.Entry(book).State = EntityState.Unchanged;
+        dbContext.Entry(book).Collection(o => o.Orders).Load();
+        dbContext.Entry(book).State = EntityState.Detached;
     }
 
     /// <summary>
