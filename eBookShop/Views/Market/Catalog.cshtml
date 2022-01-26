@@ -7,33 +7,26 @@
 }
 
 <div class="row m-2">
-    <div class="col-sm-3 card mt-3">
+    <div class="col-sm-3 card mt-3 shadow rounded">
 
     </div>
     <div class="col-sm-9">
         <div class="pt-3 hstack">
             <div class="dropdown ms-2">
-                <a class="btn-primary btn" data-bs-toggle="dropdown" role="button">
-                    @{
-                        switch (Model.SortBookState)
-                        {
-                            case SortBookState.Popular:
-                                <div>Popular first</div>
-                                break;
-                            case SortBookState.HighRating:
-                                <div>First with a high rating</div>
-                                break;
-                            case SortBookState.PriceAsc:
-                                <div>Cheaper first </div>
-                                break;
-                            case SortBookState.PriceDesc:
-                                <div>More expensive first </div>
-                                break;
-                            default:
-                                <div>Popular first </div>
-                                break;
-                        }
-                    }
+                
+                @{
+                    var sortTypeName = Model.SortBookState switch
+                    {
+                        SortBookState.Popular => "Popular first",
+                        SortBookState.HighRating => "First with a high rating",
+                        SortBookState.PriceAsc => "Cheaper first",
+                        SortBookState.PriceDesc => "More expensive first",
+                        _ => "Popular first"
+                    };
+                }
+                
+                <a class="btn-primary btn dropdown-toggle" data-bs-toggle="dropdown" role="button">
+                    @sortTypeName
                 </a>
 
                 <div class="dropdown-menu">
@@ -44,7 +37,6 @@
                 </div>
             </div>
         </div>
-
         @await Html.PartialAsync("_Books", Model.BooksViewModel)
     </div>
 </div>

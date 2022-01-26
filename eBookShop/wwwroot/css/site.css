@@ -37,6 +37,20 @@ p {
     margin-bottom: 0;
 }
 
+.title {
+    color: #000;
+    font-size: calc(1.525rem + 3.3vw);
+    line-height: 121px;
+    padding-left: 10px;
+}
+.title span {
+    display: inline;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: -10px 0 0 rgba(0, 0, 0, 0.5), 10px 0 0 rgba(0, 0, 0, 0.5);
+    padding: 0 10px 0 0;
+    color: #FFFFFF;
+}
+
 .description {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -50,10 +64,85 @@ li {
 }
 
 .bg-welcome-img {
-    background-image: url("../Photos/welcome-picture.jpg");
+    background-image: url("../Photos/bg-welcome.jpg");
     background-repeat: no-repeat;
     background-size: 100%;
-    height: 768px;
+    position: absolute;
+    left: 386px;
+    width: 1441px;
+    height: 663px;
+}
+
+.welcome-title-1 {
+    position: relative;
+    text-align: end;
+    top: 220px;
+    width: 607px;
+    height: 228px;
+    color: #323130;
+    font-size: 68px;
+    font-weight: 300;
+    line-height: 76px;
+}
+
+.title-2 {
+    position: relative;
+    color: #323130;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 40px;
+}
+
+.title-3 {
+    position: relative;
+    color: #323130;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 37px;
+    text-align: center;
+}
+
+
+.sub-title {
+    position: relative;
+    color: #323130;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: center;
+}
+
+.ill-girl-reading {
+    position: relative;
+    display: inline-block;
+    margin-top: 25px;
+    width: 324.88px;
+    height: 376.91px;
+    background:  url(https://lun-eu.icons8.com/a/vc5_tdnfq0CP24l39ZX83A/VX8jrY060ECNceX99hU4Qw/%D1%87%D1%82%D0%B5%D0%BD%D0%B8%D0%B5.png)  no-repeat;
+}
+
+.ill-girl-and-dog {
+    position: absolute;
+    top: 243px;
+    width: 320px;
+    height: 320px;
+    background:  url(https://lun-eu.icons8.com/a/vc5_tdnfq0CP24l39ZX83A/3RBiun_YI02G2bG3iBnEjw/%D0%BB%D0%B0%D1%81%D0%BA%D0%B8.png)  no-repeat;
+}
+
+.cloud-text {
+    position: relative;
+    display: block;
+    text-align: center;
+    width: 214px;
+    height: 76px;
+    border-radius: 50px;
+    background: rgba(52,85,139,0.3);
+    background-blend-mode: normal;
+    transition: .4s ease-out;
+}
+
+.cloud-text:hover {
+    background: #145c9f;
 }
 
 .bg-words-img {
@@ -61,6 +150,12 @@ li {
     background-repeat: no-repeat;
     background-size: 100%;
     height: 768px;
+}
+
+.bg-2 {
+    position: relative;
+    background: rgba(52,85,139,0.1);
+    background-blend-mode: normal;
 }
 
 .round-img {
@@ -80,4 +175,35 @@ li {
     margin-right: auto;
     width: 50%;
 }
+
+.wrap-image {
+    position: relative;
+}
+.wrap-image::before, .wrap-image::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    border: 2px solid #145DA0;
+    transition: all 0.25s ease-out;
+}
+.wrap-image::before {
+    background-color: #145DA0;
+    top: -15px;
+    left: -15px;
+}
+.wrap-image::after {
+    bottom: -15px;
+    right: -15px;
+}
+.wrap-image:hover::before {
+    top: 15px;
+    left: 15px;
+}
+.wrap-image:hover::after {
+    bottom: 15px;
+    right: 15px;
+}
+
 

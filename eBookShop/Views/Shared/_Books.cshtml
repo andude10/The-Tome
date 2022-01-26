@@ -33,7 +33,7 @@
     @foreach (var obj in Model.Books)
     {
         <div class="col-sm-6 text-center" style="width: 275px;">
-            <div class="mt-3 book-presentation" style="height: 460px">
+            <div class="card mt-3 book-presentation shadow rounded" style="height: 460px">
                 <div class="card-header">
                     <a asp-controller="Market" asp-action="BookViewer" asp-route-bookId="@obj.Id">
                         <p>@obj.Title</p>
