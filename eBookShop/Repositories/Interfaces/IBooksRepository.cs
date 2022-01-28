@@ -9,6 +9,14 @@ public interface IBooksRepository
     /// </summary>
     /// <returns>Book WITHOUT associated data</returns>
     Book GetBook(int id);
+    
+    /// <summary>
+    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
+    /// </summary>
+    /// <returns></returns>
+    IEnumerable<Book> GetBooks();
+
+    public IEnumerable<Book> GetBooks(int skipSize, int takeSize, SortBookState sortBookState);
 
     /// <summary>
     ///     Loads all orders of the book
@@ -24,12 +32,6 @@ public interface IBooksRepository
     ///     Loads all categories the book belongs to
     /// </summary>
     void LoadCategories(Book book);
-
-    /// <summary>
-    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
-    /// </summary>
-    /// <returns></returns>
-    IEnumerable<Book> GetBooks();
 
     /// <summary>
     ///     The GiveStarToBook give a star to book

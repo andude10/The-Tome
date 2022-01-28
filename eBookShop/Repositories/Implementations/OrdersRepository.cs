@@ -41,6 +41,7 @@ public class OrdersRepository : IOrdersRepository
     public void LoadBooks(Order order)
     {
         using var dbContext = _contextFactory.CreateDbContext();
+        
         dbContext.Entry(order).State = EntityState.Unchanged;
         dbContext.Entry(order).Collection(o => o.Books).Load();
         dbContext.Entry(order).State = EntityState.Detached;

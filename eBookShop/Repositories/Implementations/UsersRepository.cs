@@ -50,20 +50,13 @@ public class UsersRepository : IUsersRepository
     /// <summary>
     ///     Loads all liked books of the book
     /// </summary>
-    /// TODO: Explain what's going on here
     public void LoadLikedBooks(User user)
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
-        var email = user.Email;
-        
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var userInContext = dbContext.Users.First(u => u.Email == email);
-
-        dbContext.Entry(userInContext).Collection(u => u!.LikedBooks).Load();
-
-        user.LikedBooks = userInContext.LikedBooks;
+        dbContext.Entry(user).State = EntityState.Unchanged;
+        dbContext.Entry(user).Collection(u => u.LikedBooks).Load();
+        dbContext.Entry(user).State = EntityState.Detached;
     }
 
     /// <summary>
@@ -74,12 +67,9 @@ public class UsersRepository : IUsersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
-        var email = user.Email;
-        var userInContext = dbContext.Users.First(u => u.Email == email);
-
-        dbContext.Entry(userInContext).Collection(u => u!.Orders).Load();
-
-        user.Orders = userInContext.Orders;
+        dbContext.Entry(user).State = EntityState.Unchanged;
+        dbContext.Entry(user).Collection(u => u.Orders).Load();
+        dbContext.Entry(user).State = EntityState.Detached;
     }
 
     /// <summary>
@@ -89,7 +79,9 @@ public class UsersRepository : IUsersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
-        dbContext.Entry(user).Collection(u => u!.Posts).Load();
+        dbContext.Entry(user).State = EntityState.Unchanged;
+        dbContext.Entry(user).Collection(u => u.Posts).Load();
+        dbContext.Entry(user).State = EntityState.Detached;
     }
 
     /// <summary>

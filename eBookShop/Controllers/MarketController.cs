@@ -5,7 +5,6 @@ using eBookShop.Repositories.Implementations;
 using eBookShop.Repositories.Interfaces;
 using eBookShop.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,43 +16,39 @@ public class MarketController : Controller
     private readonly IBooksRepository _booksRepository;
     private readonly IOrdersRepository _ordersRepository;
     private readonly IUsersRepository _usersRepository;
-    private List<Book> _books;
 
     public MarketController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _booksRepository = new BooksRepository(contextFactory);
         _usersRepository = new UsersRepository(contextFactory);
         _ordersRepository = new OrdersRepository(contextFactory);
-        _books = _booksRepository.GetBooks().ToList();
     }
 
     public IActionResult Catalog(int pageId = 1, SortBookState sortBookState = SortBookState.Popular)
     {
-        _books = SortBook(_books, sortBookState).ToList();
-        _books = _books.Skip((pageId - 1) * PageSize).Take(PageSize).ToList();
+        var source = _booksRepository.GetBooks(pageId, PageSize, sortBookState).ToList();
+        var pageViewModel = new PageViewModel(source.Count, pageId, PageSize);
 
-        var pageViewModel = new PageViewModel(_books.Count, pageId, PageSize);
-        
         if (User.Identity is not {IsAuthenticated: true})
         {
             return View(new CatalogViewModel
             {
                 PageViewModel = pageViewModel,
-                BooksViewModel = new BooksViewModel(_books, null, null),
+                BooksViewModel = new BooksViewModel(source, null, null),
                 SortBookState = sortBookState
             });
         }
         
-        var user = _usersRepository.GetUser(User.Identity.Name);
+        var user = _usersRepository.GetUser(User.Identity.Name ?? throw new InvalidOperationException());
         var cart = _usersRepository.GetLastOrder(user.Email);
 
         _usersRepository.LoadLikedBooks(user);
         _ordersRepository.LoadBooks(cart);
-
+        
         return View(new CatalogViewModel
         {
             PageViewModel = pageViewModel,
-            BooksViewModel = new BooksViewModel(_books, user.LikedBooks, cart.Books),
+            BooksViewModel = new BooksViewModel(source, user.LikedBooks, cart.Books),
             SortBookState = sortBookState
         });
     }
@@ -61,14 +56,21 @@ public class MarketController : Controller
     public IActionResult BookViewer(int bookId)
     {
         var book = _booksRepository.GetBook(bookId);
-        var user = _usersRepository.GetUser(User.Identity?.Name);
-
-        _usersRepository.LoadLikedBooks(user);
+        
+        if (User.Identity is not {IsAuthenticated: true})
+        {
+            return View(new BookViewerViewModel(false, false, book));
+        }
+        
+        var user = _usersRepository.GetUser(User.Identity.Name ?? throw new InvalidOperationException());
         var cart = _usersRepository.GetLastOrder(user.Email);
 
-        return user.Orders.Last().Books.IsNullOrEmpty()
-            ? View(new BookViewerViewModel(false, book))
-            : View(new BookViewerViewModel(cart.Books.Exists(b => b.Id == book.Id), book));
+        _usersRepository.LoadLikedBooks(user);
+        _ordersRepository.LoadBooks(cart);
+
+        return View(new BookViewerViewModel(cart.Books.Exists(b => b.Id == bookId), 
+                                                    user.LikedBooks.Exists(b => b.Id == bookId),
+                                                    book));
     }
 
     /// <summary>
@@ -81,27 +83,5 @@ public class MarketController : Controller
     {
         _booksRepository.GiveStarToBook(bookId, User.Identity.Name);
         return new NoContentResult();
-    }
-
-    /// <summary>
-    ///     The SortBook returns a sorted list of books.
-    /// </summary>
-    /// <param name="books">The books</param>
-    /// <param name="sortBookState">Sort state</param>
-    /// <returns></returns>
-    private IEnumerable<Book> SortBook(IEnumerable<Book> books, SortBookState sortBookState)
-    {
-        return sortBookState switch
-        {
-            SortBookState.Popular => books.OrderBy(b =>
-            {
-                _booksRepository.LoadBookOrders(b);
-                return b.Orders.Count;
-            }),
-            SortBookState.HighRating => books.OrderBy(b => b.Stars),
-            SortBookState.PriceAsc => books.OrderBy(b => b.Price),
-            SortBookState.PriceDesc => books.OrderByDescending(b => b.Price),
-            _ => books
-        };
     }
 }

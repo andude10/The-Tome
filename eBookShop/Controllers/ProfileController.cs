@@ -9,13 +9,11 @@ namespace eBookShop.Controllers;
 
 public class ProfileController : Controller
 {
-    private readonly IDbContextFactory<AppDbContext> _contextFactory;
     private readonly IUsersRepository _usersRepository;
 
     public ProfileController(IDbContextFactory<AppDbContext> contextFactory)
     {
         _usersRepository = new UsersRepository(contextFactory);
-        _contextFactory = contextFactory;
     }
 
     [Authorize]

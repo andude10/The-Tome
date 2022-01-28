@@ -31,6 +31,31 @@ public class BooksRepository : IBooksRepository
         
         return book;
     }
+    
+    /// <summary>
+    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<Book> GetBooks()
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        return dbContext.Books.ToList();
+    }
+    
+    /// <summary>
+    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<Book> GetBooks(int skipSize, int takeSize, SortBookState sortBookState)
+    {
+        using var dbContext = _contextFactory.CreateDbContext();
+        
+        var result = dbContext.Books.Skip(skipSize)
+            .Take(takeSize)
+            .ToList();
+
+        return SortBook(sortBookState, result);
+    }
 
     /// <summary>
     ///     Loads all orders of the book
@@ -38,8 +63,9 @@ public class BooksRepository : IBooksRepository
     public void LoadBookOrders(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
+        
         dbContext.Entry(book).State = EntityState.Unchanged;
-        dbContext.Entry(book).Collection(o => o.Orders).Load();
+        dbContext.Entry(book).Collection(b => b.Orders).Load();
         dbContext.Entry(book).State = EntityState.Detached;
     }
 
@@ -49,16 +75,10 @@ public class BooksRepository : IBooksRepository
     public void LoadUsersWhoLike(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-
-        var id = book.Id;
         
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var bookInContext = dbContext.Books.First(u => u.Id == id);
-
-        dbContext.Entry(bookInContext).Collection(b => b!.UsersWhoLike).Load();
-
-        book.UsersWhoLike = bookInContext.UsersWhoLike;
+        dbContext.Entry(book).State = EntityState.Unchanged;
+        dbContext.Entry(book).Collection(b => b.UsersWhoLike).Load();
+        dbContext.Entry(book).State = EntityState.Detached;
     }
 
     /// <summary>
@@ -67,26 +87,10 @@ public class BooksRepository : IBooksRepository
     public void LoadCategories(Book book)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-
-        var id = book.Id;
         
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var bookInContext = dbContext.Books.First(u => u.Id == id);
-
-        dbContext.Entry(bookInContext).Collection(b => b!.Categories).Load();
-
-        book.Categories = bookInContext.Categories;
-    }
-
-    /// <summary>
-    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<Book> GetBooks()
-    {
-        using var dbContext = _contextFactory.CreateDbContext();
-        return dbContext.Books.ToList();
+        dbContext.Entry(book).State = EntityState.Unchanged;
+        dbContext.Entry(book).Collection(b => b.Categories).Load();
+        dbContext.Entry(book).State = EntityState.Detached;
     }
 
     /// <summary>
@@ -150,5 +154,27 @@ public class BooksRepository : IBooksRepository
 
         dbContext.Books.Remove(book);
         dbContext.SaveChanges();
+    }
+    
+    /// <summary>
+    ///     The SortBook returns a sorted list of books.
+    /// </summary>
+    /// <param name="books">The books</param>
+    /// <param name="sortBookState">Sort state</param>
+    /// <returns></returns>
+    private IEnumerable<Book> SortBook(SortBookState sortBookState, IEnumerable<Book> books)
+    {
+        return sortBookState switch
+        {
+            SortBookState.Popular => books.OrderBy(b =>
+            {
+                LoadBookOrders(b);
+                return b.Orders.Count;
+            }),
+            SortBookState.HighRating => books.OrderBy(b => b.Stars),
+            SortBookState.PriceAsc => books.OrderBy(b => b.Price),
+            SortBookState.PriceDesc => books.OrderByDescending(b => b.Price),
+            _ => books
+        };
     }
 }

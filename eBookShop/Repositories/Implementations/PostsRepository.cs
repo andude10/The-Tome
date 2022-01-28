@@ -41,15 +41,10 @@ public class PostsRepository : IPostsRepository
     public void LoadPostAuthor(Post post)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-
-        var id = post.Id;
         
-        // To use the Load() method and load an object's associated data,
-        // the object must be created in the current context
-        var postInContext = dbContext.Posts.First(p => p.Id == id);
-        dbContext.Entry(postInContext).Reference(p => p.User).Load();
-
-        post.User = postInContext.User;
+        dbContext.Entry(post).State = EntityState.Unchanged;
+        dbContext.Entry(post).Reference(p => p.User).Load();
+        dbContext.Entry(post).State = EntityState.Detached;
     }
 
     public void Create(Post item)
