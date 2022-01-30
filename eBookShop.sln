@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eBookShop", "eBookShop\eBookShop.csproj", "{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTome", "TheTome\TheTome.csproj", "{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EC58EFA0-65ED-418F-B8C2-A93739441E5A}"
 EndProject

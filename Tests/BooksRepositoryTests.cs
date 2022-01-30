@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using eBookShop.Models;
-using eBookShop.Repositories.Implementations;
+using TheTome.Models;
+using TheTome.Repositories.Implementations;
 using Xunit;
 
 namespace Tests;

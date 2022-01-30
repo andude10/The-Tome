@@ -1,4 +1,4 @@
-using eBookShop.Data;
+using TheTome.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tests;

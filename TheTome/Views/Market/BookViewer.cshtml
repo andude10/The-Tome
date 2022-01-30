@@ -1,0 +1,26 @@
+@model TheTome.ViewModels.BookViewerViewModel
+
+@{
+    ViewData["Title"] = Model.Book.Title;
+}
+
+<div class="text-center m-3">
+    <img src="@Model.Book.CoverUrl" class="center-img img-fluid" alt="@Model.Book.Title @Model.Book.Id"/>
+    <p class="display-5 fw-bold pt-3">@Model.Book.Title</p>
+    <p class="display-6 pb-3">@Model.Book.Author</p>
+</div>
+
+<p class="card card-body m-3">@Model.Book.Description</p>
+<h5 class="card card-body m-3">Price: @Model.Book.Price$</h5>
+
+@{
+    var buyNowBtn = Model.IsBought ? "btn-danger" : "btn-primary";
+}
+
+<button class="btn @buyNowBtn ms-3" asp-controller="Cart" asp-action="BuyBookToggle" asp-route-bookId="@Model.Book.Id">
+    Buy now
+    @if (Model.IsBought)
+    {
+        <div>(book in cart)</div>
+    }
+</button>
