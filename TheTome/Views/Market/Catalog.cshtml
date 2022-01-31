@@ -10,8 +10,8 @@
     <div class="col-sm-3 mt-3 shadow rounded p-2" style="height: 500px; width: 290px">
     </div>
     <div class="col-sm-9">
-         <div class="dropdown m-2 text-end">
-             @{
+        <div class="dropdown m-2 text-end">
+            @{
                 var sortTypeName = Model.SortBookState switch
                 {
                     SortBookState.Popular => "Popular first",
@@ -21,19 +21,19 @@
                     _ => "Popular first"
                     };
             }
-        
+
             <a class="btn dropdown-toggle" data-bs-toggle="dropdown" role="button">
                 @sortTypeName
             </a>
-        
+
             <div class="dropdown-menu">
                 <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.Popular">Popular first</a>
                 <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceAsc">Cheaper first</a>
                 <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.PriceDesc">More expensive first</a>
                 <a class="dropdown-item sort-button" asp-action="Catalog" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortBookState="@SortBookState.HighRating">First with a high rating</a>
             </div>
-         </div>
-        @await Html.PartialAsync("_Books", Model.BooksViewModel)
+        </div>
+        @await Html.PartialAsync("_BooksList", Model.BooksViewModel)
     </div>
 </div>
 
