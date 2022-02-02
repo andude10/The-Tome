@@ -1,7 +1,5 @@
 @model TheTome.ViewModels.FeedViewModel
 
-<h2>Feed</h2>
-
 <div>
-    @await Html.PartialAsync("_Posts", Model.Posts)
+    @await Html.PartialAsync("_Posts", Model.PostsViewModel)
 </div>

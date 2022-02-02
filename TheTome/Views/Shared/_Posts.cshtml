@@ -1,21 +1,29 @@
-@model IEnumerable<Post>
+@model TheTome.ViewModels.PostsViewModel
 
 @{
     Layout = null;
 }
 
-<script>
+<div id="posts-list">
+    @foreach (var obj in Model.Posts)
+    {
+        <div class="card m-4">
+            <a asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
+                <h4 class="card-header text-center">@obj.Title</h4>
+            </a>
 
-</script>
-
-@foreach (var obj in Model)
-{
-    <div class="card m-4">
-        <a asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
-            <h4 class="card-header text-center">@obj.Title</h4>
-        </a>
-        <div class="card-body">
-            @Html.Raw(obj.HtmlContent)
+            <div class="card-body" id="postPreview-@obj.Id" onclick="takeFirstParagraph('@obj.Id', '@obj.HtmlContent')">
+            </div>
+            <script type="text/javascript">
+                (function() {
+                    var postPreview = document.getElementById("postPreview-" + @obj.Id);
+                    
+                    var wrapper= document.createElement('div');
+                    wrapper.innerHTML= "@Html.Raw(obj.HtmlContent)";
+                        
+                    postPreview.innerHTML = wrapper.getElementsByTagName('p')[0].outerHTML;
+                })();
+            </script>
         </div>
-    </div>
-}
+    }
+</div>

@@ -9,12 +9,6 @@ public interface IBooksRepository
     /// </summary>
     /// <returns>Book WITHOUT associated data</returns>
     Book GetBook(int id);
-    
-    /// <summary>
-    ///     Returns a list of books with no associated data. To load related data, you need to use the LoadList() methods
-    /// </summary>
-    /// <returns></returns>
-    IEnumerable<Book> GetBooks();
 
     public IEnumerable<Book> GetBooks(int skipSize, int takeSize, SortBookState sortBookState);
 

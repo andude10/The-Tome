@@ -10,7 +10,7 @@ public interface IPostsRepository
     /// <returns>Post WITHOUT associated data</returns>
     Post GetPost(int id);
 
-    IEnumerable<Post> GetPosts();
+    IEnumerable<Post> GetPosts(int skipSize, int takeSize, SortPostState sortPostState);
 
     void LoadPostAuthor(Post post);
 

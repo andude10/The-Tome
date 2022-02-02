@@ -1,13 +1,11 @@
-using TheTome.Models;
-
 namespace TheTome.ViewModels;
 
 public class FeedViewModel
 {
-    public FeedViewModel(IEnumerable<Post> posts)
+    public FeedViewModel(PostsViewModel postsViewModel)
     {
-        Posts = posts;
+        PostsViewModel = postsViewModel;
     }
 
-    public IEnumerable<Post> Posts { get; set; }
+    public PostsViewModel PostsViewModel { get; set; }
 }

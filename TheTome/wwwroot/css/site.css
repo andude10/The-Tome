@@ -199,6 +199,12 @@ li {
     filter: blur(5px);
 }
 
+.filter-panel {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    height: 500px;
+}
+
 .round-img {
     border-radius: 100px;
 }

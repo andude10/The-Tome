@@ -11,7 +11,7 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid col-3">
+        <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="About" style="margin-right: 5px; padding-bottom: 8px">The tome</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -23,10 +23,7 @@
                         <a class="nav-link" asp-area="" asp-controller="Market" asp-action="Catalog">Market</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Profile" asp-action="Info">Community</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Profile" asp-action="Info">Profile</a>
+                        <a class="nav-link" asp-area="" asp-controller="Community" asp-action="Feed">Community</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Cart" asp-action="CartSummary">Cart</a>
@@ -34,6 +31,10 @@
                 </ul>
             </div>
         </div>
+
+        <li class="nav-item float-end">
+            <a class="nav-link" asp-area="" asp-controller="Profile" asp-action="Info">Profile</a>
+        </li>
     </nav>
 </header>
 

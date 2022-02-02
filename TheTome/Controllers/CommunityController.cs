@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TheTome.Data;
+using TheTome.Models;
 using TheTome.Repositories.Implementations;
 using TheTome.Repositories.Interfaces;
 using TheTome.ViewModels;
@@ -9,6 +10,7 @@ namespace TheTome.Controllers;
 
 public class CommunityController : Controller
 {
+    private const int PageSize = 12;
     private readonly IPostsRepository _postsRepository;
 
     public CommunityController(IDbContextFactory<AppDbContext> contextFactory)
@@ -25,10 +27,10 @@ public class CommunityController : Controller
         return View(post);
     }
 
-    public IActionResult Feed()
+    public IActionResult Feed(int pageId = 1, SortPostState sortPostState = SortPostState.New)
     {
-        var posts = _postsRepository.GetPosts();
+        var source = _postsRepository.GetPosts(pageId, PageSize, sortPostState).ToList();
 
-        return View(new FeedViewModel(posts));
+        return View(new FeedViewModel(new PostsViewModel(source)));
     }
 }
