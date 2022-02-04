@@ -19,7 +19,7 @@ public class ProfileController : Controller
     [Authorize]
     public IActionResult Info()
     {
-        var user = _usersRepository.GetUser(User.Identity?.Name);
+        var user = _usersRepository.GetUser(User.Identity?.Name ?? throw new InvalidOperationException());
 
         _usersRepository.LoadOrders(user);
         _usersRepository.LoadLikedBooks(user);

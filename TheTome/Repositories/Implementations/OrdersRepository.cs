@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using TheTome.Data;
 using TheTome.Models;

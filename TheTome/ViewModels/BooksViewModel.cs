@@ -13,6 +13,5 @@ public class BooksViewModel
 
     public List<Book>? BooksLikedByUser { get; }
     public List<Book>? BooksInCart { get; }
-
     public List<Book> Books { get; }
 }

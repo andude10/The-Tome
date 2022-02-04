@@ -1,4 +1,3 @@
-using Castle.Core.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -31,12 +30,11 @@ public class MarketController : Controller
 
         if (User.Identity is not {IsAuthenticated: true})
         {
-            return View(new CatalogViewModel
-            {
-                PageViewModel = pageViewModel,
-                BooksViewModel = new BooksViewModel(source, null, null),
-                SortBookState = sortBookState
-            });
+            return View(new CatalogViewModel(
+                new BooksViewModel(source, null, null),
+                pageViewModel,
+                sortBookState
+            ));
         }
         
         var user = _usersRepository.GetUser(User.Identity.Name ?? throw new InvalidOperationException());
@@ -45,12 +43,11 @@ public class MarketController : Controller
         _usersRepository.LoadLikedBooks(user);
         _ordersRepository.LoadBooks(cart);
         
-        return View(new CatalogViewModel
-        {
-            PageViewModel = pageViewModel,
-            BooksViewModel = new BooksViewModel(source, user.LikedBooks, cart.Books),
-            SortBookState = sortBookState
-        });
+        return View(new CatalogViewModel(
+            new BooksViewModel(source, user.LikedBooks, cart.Books),
+            pageViewModel,
+            sortBookState
+        ));
     }
 
     public IActionResult BookViewer(int bookId)
@@ -81,7 +78,7 @@ public class MarketController : Controller
     [Authorize]
     public IActionResult GiveStarToBook(int bookId)
     {
-        _booksRepository.GiveStarToBook(bookId, User.Identity.Name);
+        _booksRepository.GiveStarToBook(bookId, User.Identity?.Name ?? throw new InvalidOperationException());
         return new NoContentResult();
     }
 }

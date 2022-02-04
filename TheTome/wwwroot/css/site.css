@@ -16,12 +16,68 @@ html {
 
 .book-presentation {
     border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     transition: transform .2s
 }
 
 .book-presentation:hover {
     transform: scale(1.05);
+}
 
+.post-presentation {
+    transition: transform .2s;
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    max-width: 1500px;
+    position: relative;
+    padding: 2rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.post-presentation:before {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    transform-origin: 0 bottom 0;
+    transform: scaleY(0);
+    transition: 0.25s ease-out;
+}
+
+.post-presentation:hover .post-title {
+    color: #fff;
+}
+
+.post-presentation:hover .post-content {
+    color: #fff;
+}
+
+.post-presentation:hover:before {
+    transform: scaleY(1);
+}
+
+.post-title {
+    position: relative;
+    text-decoration: none;
+    color: #000;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.333;
+    transition: 0.25s ease-out;
+}
+
+.post-content {
+    position: relative;
+    color: #000;
+    transition: 0.1s ease-out;
 }
 
 #footer {
@@ -205,10 +261,6 @@ li {
     height: 500px;
 }
 
-.round-img {
-    border-radius: 100px;
-}
-
 .row-full {
     width: 99.5vw;
     position: relative;
@@ -363,6 +415,14 @@ li {
 .disclaimer-link {
     color: #755d87;
     text-decoration: none;
+}
+
+.profile-photo {
+    border-radius: 100%;
+    padding: 25px;
+    height: 400px; 
+    width: 400px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 

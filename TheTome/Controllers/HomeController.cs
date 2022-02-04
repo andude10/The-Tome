@@ -1,20 +1,11 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TheTome.Data;
 using TheTome.ViewModels;
 
 namespace TheTome.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger, IDbContextFactory<AppDbContext> contextFactory)
-    {
-        _logger = logger;
-    }
-
     public IActionResult Privacy()
     {
         return View();

@@ -96,7 +96,7 @@ public class BooksRepository : IBooksRepository
             throw new KeyNotFoundException(
                 $"Book with id {bookId.ToString()} of user or email address {email} (or both) not found");
 
-        dbContext.Entry(user).Collection(u => u!.LikedBooks).Load();
+        dbContext.Entry(user).Collection(u => u.LikedBooks).Load();
 
         if (user.LikedBooks.Exists(b => b.Id == bookId))
         {

@@ -18,8 +18,7 @@
                     SortBookState.HighRating => "First with a high rating",
                     SortBookState.PriceAsc => "Cheaper first",
                     SortBookState.PriceDesc => "More expensive first",
-                    _ => "Popular first"
-                    };
+                    _ => throw new ArgumentOutOfRangeException()};
             }
 
             <a class="btn dropdown-toggle" data-bs-toggle="dropdown" role="button">

@@ -7,23 +7,24 @@
 <div id="posts-list">
     @foreach (var obj in Model.Posts)
     {
-        <div class="card m-4">
-            <a asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
-                <h4 class="card-header text-center">@obj.Title</h4>
-            </a>
-
-            <div class="card-body" id="postPreview-@obj.Id" onclick="takeFirstParagraph('@obj.Id', '@obj.HtmlContent')">
-            </div>
-            <script type="text/javascript">
-                (function() {
-                    var postPreview = document.getElementById("postPreview-" + @obj.Id);
+        <a class="text-decoration-none " asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
+            <div class="post-presentation m-3">
                     
-                    var wrapper= document.createElement('div');
-                    wrapper.innerHTML= "@Html.Raw(obj.HtmlContent)";
+                <h2 class="post-title text-center position-relative position-absolute start-50 translate-middle">@obj.Title</h2>
+        
+                <div class="post-content text-center m-1" id="postPreview-@obj.Id">
+                </div>
+                <script type="text/javascript">
+                    (function() {
+                        let postPreview = document.getElementById("postPreview-" + @obj.Id);
                         
-                    postPreview.innerHTML = wrapper.getElementsByTagName('p')[0].outerHTML;
-                })();
-            </script>
-        </div>
+                        let wrapper= document.createElement('div');
+                        wrapper.innerHTML= "@Html.Raw(obj.HtmlContent)";
+                            
+                        postPreview.innerHTML = wrapper.getElementsByTagName('p')[0].outerHTML;
+                    })();
+                </script>
+            </div>
+        </a>
     }
 </div>

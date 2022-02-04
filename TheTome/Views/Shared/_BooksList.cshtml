@@ -34,7 +34,7 @@
     @foreach (var obj in Model.Books)
     {
         <div class="col-sm-6 mb-4" style="width: 310px">
-            <div class="book-presentation shadow rounded" style="height: 435px">
+            <div class="book-presentation" style="height: 435px">
                 <a asp-controller="Market" asp-action="BookViewer" asp-route-bookId="@obj.Id">
                     <div class="bg-blur" style="background-image: url(@obj.CoverUrl);">
                         <img class="img-fluid center-img content p-1" src="@obj.CoverUrl" alt="Cover" style="height: 250px; width: auto"/>
@@ -87,8 +87,4 @@
             </div>
         </div>
     }
-</div>
-
-<div id="progress" style="display:none">
-    <h4>Loading...</h4>
 </div>

@@ -91,16 +91,16 @@ public class PostsRepository : IPostsRepository
     /// <param name="posts">The posts</param>
     /// <param name="sortPostState">Sort state</param>
     /// <returns></returns>
-    private IEnumerable<Post> SortPosts(SortPostState sortPostState, IEnumerable<Post> posts)
+    private static IEnumerable<Post> SortPosts(SortPostState sortPostState, IEnumerable<Post> posts)
     {
         return sortPostState switch
         {
             SortPostState.New => posts.OrderBy(p => p.Date),
             SortPostState.TodayBest => posts.Where(p => p.Date.Day == DateTime.Now.Day)
                 .OrderBy(p => p.Rating),
-            SortPostState.YearBest => posts.Where(p => p.Date.Year == DateTime.Now.Year)
-                .OrderBy(p => p.Rating),
             SortPostState.MonthBest => posts.Where(p => p.Date.Month == DateTime.Now.Month)
+                .OrderBy(p => p.Rating),
+            SortPostState.YearBest => posts.Where(p => p.Date.Year == DateTime.Now.Year)
                 .OrderBy(p => p.Rating),
             _ => posts
         };
