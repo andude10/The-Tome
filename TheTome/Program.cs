@@ -1,6 +1,6 @@
-using TheTome.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using TheTome.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

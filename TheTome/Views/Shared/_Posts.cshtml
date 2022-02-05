@@ -9,9 +9,9 @@
     {
         <a class="text-decoration-none " asp-controller="Community" asp-action="PostViewer" asp-route-postId="@obj.Id">
             <div class="post-presentation m-3">
-                    
+
                 <h2 class="post-title text-center position-relative position-absolute start-50 translate-middle">@obj.Title</h2>
-        
+
                 <div class="post-content text-center m-1" id="postPreview-@obj.Id">
                 </div>
                 <script type="text/javascript">

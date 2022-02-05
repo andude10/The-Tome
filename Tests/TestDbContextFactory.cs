@@ -1,5 +1,5 @@
-using TheTome.Data;
 using Microsoft.EntityFrameworkCore;
+using TheTome.Data;
 
 namespace Tests;
 

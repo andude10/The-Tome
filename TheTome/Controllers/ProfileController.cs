@@ -24,11 +24,7 @@ public class ProfileController : Controller
         _usersRepository.LoadOrders(user);
         _usersRepository.LoadLikedBooks(user);
         _usersRepository.LoadPosts(user);
-        return View(user);
-    }
 
-    public IActionResult ShowOrders()
-    {
-        return View();
+        return View(user);
     }
 }

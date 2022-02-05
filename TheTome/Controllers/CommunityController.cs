@@ -32,7 +32,7 @@ public class CommunityController : Controller
         var source = _postsRepository.GetPosts(pageId, PageSize, sortPostState).ToList();
 
         return View(new FeedViewModel(
-            new PostsViewModel(source), 
+            new PostsViewModel(source),
             new PageViewModel(source.Count, pageId, PageSize),
             sortPostState
         ));

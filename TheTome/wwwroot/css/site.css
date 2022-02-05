@@ -420,7 +420,7 @@ li {
 .profile-photo {
     border-radius: 100%;
     padding: 25px;
-    height: 400px; 
+    height: 400px;
     width: 400px;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }

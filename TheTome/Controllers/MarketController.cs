@@ -29,20 +29,18 @@ public class MarketController : Controller
         var pageViewModel = new PageViewModel(source.Count, pageId, PageSize);
 
         if (User.Identity is not {IsAuthenticated: true})
-        {
             return View(new CatalogViewModel(
                 new BooksViewModel(source, null, null),
                 pageViewModel,
                 sortBookState
             ));
-        }
-        
+
         var user = _usersRepository.GetUser(User.Identity.Name ?? throw new InvalidOperationException());
         var cart = _usersRepository.GetLastOrder(user.Email);
 
         _usersRepository.LoadLikedBooks(user);
         _ordersRepository.LoadBooks(cart);
-        
+
         return View(new CatalogViewModel(
             new BooksViewModel(source, user.LikedBooks, cart.Books),
             pageViewModel,
@@ -53,21 +51,18 @@ public class MarketController : Controller
     public IActionResult BookViewer(int bookId)
     {
         var book = _booksRepository.GetBook(bookId);
-        
-        if (User.Identity is not {IsAuthenticated: true})
-        {
-            return View(new BookViewerViewModel(false, false, book));
-        }
-        
+
+        if (User.Identity is not {IsAuthenticated: true}) return View(new BookViewerViewModel(false, false, book));
+
         var user = _usersRepository.GetUser(User.Identity.Name ?? throw new InvalidOperationException());
         var cart = _usersRepository.GetLastOrder(user.Email);
 
         _usersRepository.LoadLikedBooks(user);
         _ordersRepository.LoadBooks(cart);
 
-        return View(new BookViewerViewModel(cart.Books.Exists(b => b.Id == bookId), 
-                                                    user.LikedBooks.Exists(b => b.Id == bookId),
-                                                    book));
+        return View(new BookViewerViewModel(cart.Books.Exists(b => b.Id == bookId),
+            user.LikedBooks.Exists(b => b.Id == bookId),
+            book));
     }
 
     /// <summary>

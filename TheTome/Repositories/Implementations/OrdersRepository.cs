@@ -21,14 +21,11 @@ public class OrdersRepository : IOrdersRepository
     public Order GetOrder(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var order = dbContext.Orders.First(o => o.Id == id);
 
-        if (order == null)
-        {
-            throw new KeyNotFoundException($"No order found with id {id}");
-        }
-        
+        if (order == null) throw new KeyNotFoundException($"No order found with id {id}");
+
         Console.WriteLine($"DebugView: {dbContext.ChangeTracker.DebugView.ShortView}");
         return order;
     }
@@ -39,7 +36,7 @@ public class OrdersRepository : IOrdersRepository
     public void LoadBooks(Order order)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         dbContext.Entry(order).State = EntityState.Unchanged;
         dbContext.Entry(order).Collection(o => o.Books).Load();
         dbContext.Entry(order).State = EntityState.Detached;
@@ -48,18 +45,15 @@ public class OrdersRepository : IOrdersRepository
     public void AddBookToOrder(int orderId, int bookId, int userId)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var order = dbContext.Orders.First(o => o.Id == orderId);
         var book = dbContext.Books.First(b => b.Id == bookId);
-        
-        if (order == null)
-        {
-            throw new KeyNotFoundException($"No order found with id {orderId}");
-        }
-        
+
+        if (order == null) throw new KeyNotFoundException($"No order found with id {orderId}");
+
         if (order.IsCompleted)
         {
-            var newOrder = new Order { UserId = userId, OrderDate = DateTime.Now };
+            var newOrder = new Order {UserId = userId, OrderDate = DateTime.Now};
             newOrder.Books.Add(book);
 
             Create(newOrder);
@@ -70,25 +64,19 @@ public class OrdersRepository : IOrdersRepository
             Update(order);
         }
     }
-    
+
     public void RemoveBookFromOrder(int orderId, int bookId)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var order = dbContext.Orders.Include(o => o.Books)
             .SingleOrDefault(o => o.Id == orderId);
 
-        if (order == null)
-        {
-            throw new KeyNotFoundException($"No order found with id {orderId}");
-        }
-        
-        foreach (var book in order.Books.Where(b => b.Id == bookId).ToList())
-        {
-            order.Books.Remove(book);
-        }
-        
-        dbContext.SaveChanges(); 
+        if (order == null) throw new KeyNotFoundException($"No order found with id {orderId}");
+
+        foreach (var book in order.Books.Where(b => b.Id == bookId).ToList()) order.Books.Remove(book);
+
+        dbContext.SaveChanges();
     }
 
     /// <summary>
@@ -98,17 +86,14 @@ public class OrdersRepository : IOrdersRepository
     {
         using var dbContext = _contextFactory.CreateDbContext();
 
-        order.Books= new List<Book>()
+        order.Books = new List<Book>
         {
             dbContext.Orders.Include(o => o.Books).AsTracking()
-            .First(o => o.Id == order.Id)
-            .Books.FirstOrDefault(b => predicate(b)) ?? throw new InvalidOperationException()
+                .First(o => o.Id == order.Id)
+                .Books.FirstOrDefault(b => predicate(b)) ?? throw new InvalidOperationException()
         };
 
-        if (order.Books == null)
-        {
-            throw new KeyNotFoundException($"No book found with given predicate");
-        }
+        if (order.Books == null) throw new KeyNotFoundException("No book found with given predicate");
     }
 
     public void Create(Order order)
@@ -131,10 +116,7 @@ public class OrdersRepository : IOrdersRepository
 
         var order = dbContext.Orders.Find(id);
 
-        if (order == null)
-        {
-            throw new KeyNotFoundException($"Order with {id.ToString()} id is Not found");
-        }
+        if (order == null) throw new KeyNotFoundException($"Order with {id.ToString()} id is Not found");
 
         dbContext.Orders.Remove(order);
         dbContext.SaveChanges();

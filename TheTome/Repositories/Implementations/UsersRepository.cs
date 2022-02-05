@@ -22,28 +22,22 @@ public class UsersRepository : IUsersRepository
     public User GetUser(string email)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var user = dbContext.Users.FirstOrDefault(u => u.Email == email);
 
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"No user found with email {email}");
-        }
-        
+        if (user == null) throw new KeyNotFoundException($"No user found with email {email}");
+
         return user;
     }
 
     public User GetUser(int id)
     {
         using var dbContext = _contextFactory.CreateDbContext();
-        
+
         var user = dbContext.Users.Find(id);
 
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"No user found with id {id}");
-        }
-        
+        if (user == null) throw new KeyNotFoundException($"No user found with id {id}");
+
         return user;
     }
 
@@ -108,20 +102,16 @@ public class UsersRepository : IUsersRepository
 
         var user = dbContext.Users.FirstOrDefault(u => u.Email == email);
 
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"User with {email} email is Not found");
-        }
+        if (user == null) throw new KeyNotFoundException($"User with {email} email is Not found");
 
         var order = dbContext.Entry(user)
-                             .Collection(u => u.Orders)
-                             .Query()
-                             .OrderBy(o => o.Id)
-                             .Last();
+            .Collection(u => u.Orders)
+            .Query()
+            .OrderBy(o => o.Id)
+            .Last();
         if (order == null)
-        {
-            throw new NullReferenceException($"No user (user id: {user.Id}) order was found. User must have at least one order");
-        }
+            throw new NullReferenceException(
+                $"No user (user id: {user.Id}) order was found. User must have at least one order");
 
         return order;
     }
@@ -146,10 +136,7 @@ public class UsersRepository : IUsersRepository
 
         var user = dbContext.Users.Find(id);
 
-        if (user == null)
-        {
-            throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
-        }
+        if (user == null) throw new KeyNotFoundException($"User with {id.ToString()} id is Not found");
 
         dbContext.Users.Remove(user);
         dbContext.SaveChanges();

@@ -27,7 +27,7 @@ public class CartController : Controller
 
         var cart = _usersRepository.GetLastOrder(user.Email);
         _ordersRepository.LoadBooks(cart);
-        
+
         var cartViewModel = new CartViewModel(new BooksViewModel(cart.Books, user.LikedBooks, cart.Books))
         {
             TotalPrice = cart.Books.Sum(b => b.Price),
@@ -36,7 +36,7 @@ public class CartController : Controller
 
         return View(cartViewModel);
     }
-    
+
     [Authorize]
     public IActionResult BuyBookToggle(int bookId)
     {
@@ -44,7 +44,7 @@ public class CartController : Controller
         var lastOrder = _usersRepository.GetLastOrder(user.Email);
 
         _ordersRepository.LoadBooks(lastOrder);
-        
+
         if (!lastOrder.Books.Exists(b => b.Id == bookId))
         {
             _ordersRepository.AddBookToOrder(lastOrder.Id, bookId, user.Id);
@@ -53,7 +53,7 @@ public class CartController : Controller
         {
             _ordersRepository.RemoveBookFromOrder(lastOrder.Id, bookId);
         }
-        
+
         return new NoContentResult();
     }
 }
