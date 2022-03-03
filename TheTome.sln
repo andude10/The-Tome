@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTome", "TheTome\TheTome.csproj", "{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTome.WebApp", "src\TheTome.WebApp\TheTome.WebApp.csproj", "{CFD7C9F8-F337-4AE3-BD7C-28B244DA1C8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{EC58EFA0-65ED-418F-B8C2-A93739441E5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationTests", "tests\IntegrationTests\IntegrationTests.csproj", "{EC58EFA0-65ED-418F-B8C2-A93739441E5A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTome.Core", "src\TheTome.Core\TheTome.Core.csproj", "{4F1869AC-D997-4C68-99B5-723CD45AFB05}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheTome.Infrastructure", "src\TheTome.Infrastructure\TheTome.Infrastructure.csproj", "{53D5E88B-E33D-4D64-A865-B15768E430D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC58EFA0-65ED-418F-B8C2-A93739441E5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F1869AC-D997-4C68-99B5-723CD45AFB05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F1869AC-D997-4C68-99B5-723CD45AFB05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F1869AC-D997-4C68-99B5-723CD45AFB05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F1869AC-D997-4C68-99B5-723CD45AFB05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D5E88B-E33D-4D64-A865-B15768E430D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D5E88B-E33D-4D64-A865-B15768E430D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D5E88B-E33D-4D64-A865-B15768E430D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D5E88B-E33D-4D64-A865-B15768E430D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,32 @@
+@model TheTome.WebApp.ViewModels.LoginModel
+
+<div class="row mt-5">
+    <div class="text-center col">
+        <p class="display-6">
+            Welcome to TheTome.WebApp! Enter your existing username and password or
+            <a asp-action="Register" asp-controller="Account">register</a>
+        </p>
+        <div class="ill-girl-reading"></div>
+    </div>
+
+    <div class="col m-2">
+        <form asp-action="Login" asp-controller="Account" asp-anti-forgery="true">
+            <div class="text-danger fw-bold" asp-validation-summary="ModelOnly"></div>
+            <div>
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label mt-4">Enter Email</label>
+                    <input type="text" asp-for="Email" class="form-control"/>
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password" class="form-label mt-4">Enter password</label>
+                    <input asp-for="Password" class="form-control"/>
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <div class="form-group mt-3">
+                    <input type="submit" value="Submit" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+@model TheTome.WebApp.ViewModels.BookViewerViewModel
+
+@{
+    ViewData["Title"] = Model.Book.Title;
+}
+
+<script>
+    function pressLike() {
+        var image = document.getElementById("likeBtn");
+        if (image.src === "https://img.icons8.com/ios/48/000000/star--v1.png") {
+            image.src = "https://img.icons8.com/ios-filled/48/000000/star--v1.png";
+        }
+        else {
+            image.src = "https://img.icons8.com/ios/48/000000/star--v1.png";
+        }
+    }
+    
+    function addToCart() {
+            var btn = document.getElementById("buyBtn");
+            if (btn.classList.contains("btn-primary")) {
+                btn.textContent = "Remove from cart";
+                btn.classList.remove("btn-primary");
+                btn.classList.add("btn-danger")
+            }
+            else {
+                btn.textContent = "Buy now";
+                btn.classList.remove("btn-danger");
+                btn.classList.add("btn-primary")
+            }
+        }
+</script>
+
+<div class="row m-5">
+    <div class="col-4">
+        <img class="img-fluid center-img" src="@Model.Book.CoverUrl" alt="Cover" style="height: 400px; width: auto"/>
+        <div class="row m-2" style="width: 325px">
+            <a asp-controller="Market" asp-action="GiveStarToBook" asp-route-bookId="@Model.Book.Id"
+               class="ms-1 mb-1 text-xl-end bg-white col-4" role="button" onclick="pressLike()"
+               style="height: 25px; width: 55px">
+
+                @{
+                    var starIcon = Model.IsLiked
+                        ? "https://img.icons8.com/ios-filled/48/000000/star--v1.png"
+                        : "https://img.icons8.com/ios/48/000000/star--v1.png";
+                }
+                <img class="img-fluid" style="height: 25px; width: 25px;" src="@starIcon" alt="LikeIt" id="likeBtn"/>
+            </a>
+
+            @{
+                var buyNowBtn = Model.IsBought ? "btn-danger" : "btn-primary";
+            }
+
+            <a class="btn col @buyNowBtn" asp-controller="Cart" asp-action="BuyBookToggle" asp-route-bookId="@Model.Book.Id"
+               onclick="addToCart()" id="buyBtn">
+                @{
+                    if (Model.IsBought)
+                    {
+                        <div>Remove from cart</div>
+                    }
+                    else
+                    {
+                        <div>Buy now</div>
+                    }
+                }
+            </a>
+        </div>
+    </div>
+    <div class="col">
+        <div class="shadow rounded p-3 m-3">
+            <h1>@Model.Book.Title</h1>
+            <h3>@Model.Book.Author$</h3>
+            <p>@Model.Book.Description</p>
+        </div>
+        <div class="shadow rounded p-3 m-3">
+            <h5>Price: @Model.Book.Price$</h5>
+        </div>
+        <div class="shadow rounded p-3 m-3">
+            <h5>Rating: @Model.Book.Stars</h5>
+        </div>
+    </div>
+</div>

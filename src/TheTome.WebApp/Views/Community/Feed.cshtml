@@ -1,0 +1,44 @@
+@model TheTome.WebApp.ViewModels.FeedViewModel
+
+@{
+    ViewData["Title"] = "Explore";
+    var hasPreviousPage = Model.PageViewModel.HasPreviousPage ? "" : "disabled";
+    var hasNextPage = Model.PageViewModel.HasNextPage ? "" : "disabled";
+}
+
+<div class="row m-2">
+    <div class="col">
+        <div class="dropdown m-2 text-end">
+            @{
+                var sortTypeName = Model.SortPostState switch
+                {
+                    SortPostState.New => "New posts",
+                    SortPostState.TodayBest => "Today best",
+                    SortPostState.MonthBest => "Month best",
+                    SortPostState.YearBest => "Year best",
+                    _ => throw new ArgumentOutOfRangeException()};
+            }
+
+            <a class="btn dropdown-toggle" data-bs-toggle="dropdown" role="button">
+                @sortTypeName
+            </a>
+
+            <div class="dropdown-menu">
+                <a class="dropdown-item sort-button" asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortPostState="@SortPostState.New">New posts</a>
+                <a class="dropdown-item sort-button" asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortPostState="@SortPostState.TodayBest">Today best</a>
+                <a class="dropdown-item sort-button" asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortPostState="@SortPostState.MonthBest">Month best</a>
+                <a class="dropdown-item sort-button" asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber)" asp-route-sortPostState="@SortPostState.YearBest">Year best</a>
+            </div>
+        </div>
+        @await Html.PartialAsync("_Posts", Model.PostsViewModel)
+    </div>
+</div>
+
+<ul class="pagination justify-content-center m-3">
+    <li class="page-item @hasPreviousPage">
+        <a asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber - 1)" asp-route-sortPostState="@Model.SortPostState" class="page-link">Previous</a>
+    </li>
+    <li class="page-item @hasNextPage">
+        <a asp-action="Feed" asp-route-pageId="@(Model.PageViewModel.PageNumber + 1)" asp-route-sortPostState="@Model.SortPostState" class="page-link">Next</a>
+    </li>
+</ul>
